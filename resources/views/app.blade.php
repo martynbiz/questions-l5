@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Laravel</title>
 
-	<link href="/css/app.css" rel="stylesheet">
+	<link href="{{elixir('css/all.css')}}" rel="stylesheet">
 
 	<!-- Fonts -->
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
@@ -54,11 +54,24 @@
 	</nav>
 	
 	<div class="container">
+		@include('partials.flash')
+			
 		@yield('content')
 	</div>
+	
+	@include('partials.modal')
 
 	<!-- Scripts -->
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	
+	<script>
+	
+	$('.alert').not('.alert-important').delay(3000).slideUp(300);
+	
+	$('#myModal').modal();
+		
+	</script>
+	
 </body>
 </html>

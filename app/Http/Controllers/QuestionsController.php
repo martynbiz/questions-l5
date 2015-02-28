@@ -9,16 +9,22 @@ use Auth;
 use Request;
 
 class QuestionsController extends Controller {
-
+    
 	protected $question;
     
-    public function index(Question $question)
+    public function __construct(Question $question)
     {
-        // var_dump(get_class($question)); exit; // Outputs App\Question when testing too
-        
-        $questions = $question
+        $this->question = $question;
+    }
+    
+    public function index()
+    {
+        $questions = $this->question
             ->latest()
             ->get();
+        
+        // \Session::flash('flash_message', 'A new question has been created');
+        // \Session::flash('flash_message_important', true);
         
         return view('questions.index', compact('questions'));
     }
@@ -35,13 +41,13 @@ class QuestionsController extends Controller {
         return view('questions.create');
     }
     
-    public function store(QuestionRequest $request)
+    public function store(\Illuminate\Auth\AuthManager $auth, QuestionRequest $request)
     {
-        $question = new Question($request->all());
+        $auth->user()->questions()->create( $request->all() );
         
-        Auth::user()->questions()->save($question);
-        
-        return redirect('questions');
+        return redirect('questions')->with([
+            'flash_message' => 'A new question has been created',
+        ]);
     }
     
     public function edit($id)
