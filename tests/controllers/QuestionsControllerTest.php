@@ -4,9 +4,15 @@ class QuestionsControllerTest extends TestCase {
 
     protected $mocks = [];
     
-    public function __construct()
-    {
+    public function setUp()
+    {   
+        parent::setUp();
+        
         $this->mocks['question'] = Mockery::mock('App\Question');
+        
+        $this->app->instance('App\Question', $this->mocks['question']);
+        
+        Session::start();
     }
     
     public function tearDown()
@@ -14,65 +20,73 @@ class QuestionsControllerTest extends TestCase {
         Mockery::close();
     }
     
-    public function testQuestionIndexGetsLatestQuestions()
-    {
-        $this->mocks['question']
-           ->shouldReceive('latest')
-           ->once()
-           ->andReturnSelf();
+    // public function testQuestionIndexGetsLatestQuestions()
+    // {
+    //     $this->mocks['question']
+    //        ->shouldReceive('latest')
+    //        ->once()
+    //        ->andReturnSelf();
         
-        $questions = new Illuminate\Database\Eloquent\Collection;
-        $this->mocks['question']
-            ->shouldReceive('get')
-            ->once()
-            ->andReturn($questions);
+    //     $questions = new Illuminate\Database\Eloquent\Collection;
+    //     $this->mocks['question']
+    //         ->shouldReceive('get')
+    //         ->once()
+    //         ->andReturn($questions);
         
-        $this->app->instance('App\Question', $this->mocks['question']);
+    //     // dispatch
         
-        // dispatch
+    //     $response = $this->call('GET', 'questions');
         
-        $response = $this->call('GET', 'questions');
-        
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertViewHas('questions', $questions);
+    //     $this->assertEquals(200, $response->getStatusCode());
+    //     $this->assertViewHas('questions', $questions);
         
         
 
-        // $this->assertResponseOk();
-        // $this->assertViewHas('questions');
-        //$this->assertEquals(200, $response->getStatusCode());
-        // $this->assertResponseStatus(403);
-        // $this->assertRedirectedTo('foo');
-        // $this->assertRedirectedToRoute('route.name');
-        // $this->assertRedirectedToAction('Controller@method');
-        // $this->assertViewHas('name');
-        // $this->assertViewHas('age', $value);
-        // $this->assertSessionHas('name');
-        // $this->assertSessionHas('age', $value);
-    }
+    //     // $this->assertResponseOk();
+    //     // $this->assertViewHas('questions');
+    //     //$this->assertEquals(200, $response->getStatusCode());
+    //     // $this->assertResponseStatus(403);
+    //     // $this->assertRedirectedTo('foo');
+    //     // $this->assertRedirectedToRoute('route.name');
+    //     // $this->assertRedirectedToAction('Controller@method');
+    //     // $this->assertViewHas('name');
+    //     // $this->assertViewHas('age', $value);
+    //     // $this->assertSessionHas('name');
+    //     // $this->assertSessionHas('age', $value);
+    // }
     
-    public function testShowQuestionsFindsById()
+    // public function testShowQuestionsFindsById()
+    // {
+    //     $id = 1;
+        
+    //     $question = new App\Question();
+        
+    //     $this->mocks['question']
+    //         ->shouldReceive('findOrFail')
+    //         ->once()
+    //         ->with($id)
+    //         ->andReturn($question);
+        
+    //     // dispatch
+        
+    //     $response = $this->call('GET', 'questions/' . $id);
+        
+    //     $this->assertEquals(200, $response->getStatusCode());
+    //     $this->assertViewHas('question', $question);
+    // }
+    
+    public function testStoreWithInvalidParams()
     {
-        $id = 1;
+        // $this->mocks['auth'] = Mockery::mock('Illuminate\Auth\AuthManager');
         
-        $question = new App\Question();
+        // $this->app->instance('Illuminate\Auth\AuthManager', $this->mocks['auth']);
         
-        $this->mocks['question']
-            ->shouldReceive('findOrFail')
-            ->once()
-            ->with($id)
-            ->andReturn($question);
+        $response = $this->call('POST', 'questions', array(
+            '_token' => csrf_token(),
+        ));
         
-        $this->app->instance('App\Question', $this->mocks['question']);
-        
-        // dispatch
-        
-        $response = $this->call('GET', 'questions/' . $id);
-        
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertViewHas('question', $question);
+        $this->assertRedirectedTo('questions');
     }
-
 }
 
 

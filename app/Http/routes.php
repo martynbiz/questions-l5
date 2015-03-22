@@ -11,13 +11,23 @@
 |
 */
 
-Route::get('/', 'WelcomeController@index');
-
-Route::get('home', 'HomeController@index');
-
-Route::resource('questions', 'QuestionsController');
+Route::resource('/', 'QuestionsController');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
 ]);
+
+
+// admin/...
+
+Route::group(['prefix' => 'admin'], function() {
+    Route::resource('questions', 'Admin\QuestionsController');
+});
+
+
+// account/...
+
+Route::group(['prefix' => 'account'], function() {
+    Route::resource('questions', 'Account\QuestionsController');
+});

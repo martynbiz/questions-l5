@@ -19,5 +19,13 @@ class Question extends Model {
     {
         return $this->belongsTo('App\User');
     }
+    
+    /**
+    * Question has many tags
+    */ 
+    public function tags()
+    {
+        return $this->belongsToMany('App\Tag');
+    }
 
 }
