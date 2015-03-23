@@ -17,5 +17,5 @@
         </div>
     @endforeach
     
-    <a href="{{route('create')}}" class="btn btn-default">Ask a question</a>
+    <a href="{{url('ask')}}" class="btn btn-default">Ask a question</a>
 @stop

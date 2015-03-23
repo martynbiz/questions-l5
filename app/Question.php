@@ -50,5 +50,47 @@ class Question extends Model {
     {
         return $this->hasMany('App\Follow');
     }
+    
+    
+    // query scopes
+    
+    /**
+     * Fetch the newest questions
+     */
+    public function scopeNewest($query)
+    {
+        return $query->with('answers')
+            ->with('tags')
+            ->with('user')
+            ->with('follows')
+            ->latest()
+            ->get();
+    }
+    
+    /**
+     * Fetch the most popular questions
+     */
+    public function scopePopular($query)
+    {
+        return $query->with('answers')
+            ->with('tags')
+            ->with('user')
+            ->with('follows')
+            ->latest()
+            ->get();
+    }
+    
+    /**
+     * Fetch the unanswered questions
+     */
+    public function scopeUnanswered($query)
+    {
+        return $query->with('answers')
+            ->with('tags')
+            ->with('user')
+            ->with('follows')
+            ->latest()
+            ->get();
+    }
 
 }

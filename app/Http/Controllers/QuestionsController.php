@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Question;
 use App\Tag;
 
-use Auth;
+use Illuminate\Auth\AuthManager;
+
+// use Auth;
 use Request;
 
 class QuestionsController extends Controller {
@@ -18,45 +20,40 @@ class QuestionsController extends Controller {
      */
     public function __construct(Question $question)
     {
+        // set our controllers model
         $this->question = $question;
+        
+        // apply auth middleware to authenticate certain pages. All other
+        // page will require that the user logs in.
+        $this->middleware('auth', ['except' => ['index', 'show']]);
     }
     
     /**
-     * 
+     * Display page of newest questions
      */
     public function index() // newest
     {
-        $questions = $this->question
-            ->with('answers')
-            ->with('tags')
-            ->with('user')
-            ->with('follows')
-            ->latest()
-            ->get();
+        $questions = $this->question->newest();
         
         return view('questions.index', compact('questions'));
     }
     
     /**
-     * 
+     * Display page of popular questions
      */
     public function popular()
     {
-        $questions = $this->question
-            ->latest()
-            ->get();
+        $questions = $this->question->popular();
         
         return view('questions.index', compact('questions'));
     }
     
     /**
-     * 
+     * Display page of unanswered questions
      */
     public function unanswered()
     {
-        $questions = $this->question
-            ->latest()
-            ->get();
+        $questions = $this->question->unanswered();
         
         return view('questions.index', compact('questions'));
     }
@@ -66,8 +63,8 @@ class QuestionsController extends Controller {
      */
     public function show($id)
     {
-        $question = $this->question
-            ->findOrFail($id);
+        // will throw an exception if not found
+        $question = $this->question->findOrFail($id);
         
         return view('questions.show', compact('question'));
     }
@@ -77,6 +74,7 @@ class QuestionsController extends Controller {
      */
     public function create(Tag $tag)
     {
+        // get the tags so that we can display tag list
         $tags = $tag->all();
         
         return view('questions.create', compact('tags'));
@@ -85,10 +83,9 @@ class QuestionsController extends Controller {
     /**
      * 
      */
-    public function store(\Illuminate\Auth\AuthManager $auth, QuestionRequest $request)
+    public function store(AuthManager $auth, QuestionRequest $request)
     {
-        $auth->user()->questions()
-            ->create( $request->all() );
+        $auth->user()->questions()->create( $request->all() );
         
         return redirect()->route('index')->with([
             'flash_message' => 'A new question has been created',
@@ -100,10 +97,10 @@ class QuestionsController extends Controller {
     /**
      * 
      */
-    public function edit($id)
+    public function edit(AuthManager $auth, $id)
     {
-        $question = $this->question
-            ->findOrFail($id);
+        // will throw an exception if not found
+        $question = $auth->user()->questions()->findOrFail($id);
         
         return view('questions.edit', compact('question'));
     }
@@ -111,11 +108,12 @@ class QuestionsController extends Controller {
     /**
      * 
      */
-    public function update(QuestionRequest $request, $id)
+    public function update(AuthManager $auth, QuestionRequest $request, $id)
     {
-        $question = $this->question
-            ->findOrFail($id);
+        // will throw an exception if not found
+        $question = $auth->user()->questions()->findOrFail($id);
         
+        // update the question with the request params
         $question->update($request->all());
         
         return redirect()->route('show', ['id' => $id])->with([

@@ -4,6 +4,8 @@ use App\Question;
 
 class QuestionTest extends TestCase
 {
+    // tets relationships
+    
     public function testUserBelongsToRelationshipExists()
     {
         $question = new Question;
@@ -23,5 +25,23 @@ class QuestionTest extends TestCase
         $question = new Question;
         
         $this->assertEquals('Illuminate\Database\Eloquent\Relations\BelongsToMany', get_class( $question->tags() ));
+    }
+    
+    
+    // test validation
+    
+    public function testIsInvalidWithoutAnyValues()
+    {
+        
+    }
+    
+    public function testIsInvalidWithInvalidValues()
+    {
+        
+    }
+    
+    public function testIsInvalidWithValidValues()
+    {
+        
     }
 }

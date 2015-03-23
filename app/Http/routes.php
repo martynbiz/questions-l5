@@ -13,6 +13,8 @@
 
 // questions routes
 
+Route::get('/{id}', 'QuestionsController@show')->where('id', '[0-9]+');
+Route::get('/ask', 'QuestionsController@create');
 Route::resource('/', 'QuestionsController');
 
 Route::get('popular', 'QuestionsController@popular');
