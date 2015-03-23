@@ -1,7 +1,6 @@
 <?php namespace App;
 
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
@@ -33,12 +32,20 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     
     /**
     * This article is owned by user
-    * 
-    * @return \Illuminte\Database\Eloquent\Relations\BelongsTo
+    * @return \Illuminte\Database\Eloquent\Relations\HasMany
     */    
     public function questions()
     {
         return $this->hasMany('App\Question');
+    }
+    
+    /**
+    * This article is owned by user
+    * @return \Illuminte\Database\Eloquent\Relations\HasMany
+    */    
+    public function answers()
+    {
+        return $this->hasMany('App\Answer');
     }
 
 }

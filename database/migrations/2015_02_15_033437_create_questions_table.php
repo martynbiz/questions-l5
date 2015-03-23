@@ -18,7 +18,9 @@ class CreateQuestionsTable extends Migration {
 			$table->string('title');
 			$table->string('slug');
 			$table->text('content');
-			$table->integer('user_id');
+			$table->integer('user_id')
+				->unsigned()
+				->index();
 			$table->timestamps();
 			
 			// $table->foreign('user_id')

@@ -11,7 +11,15 @@
 |
 */
 
+// questions routes
+
 Route::resource('/', 'QuestionsController');
+
+Route::get('popular', 'QuestionsController@popular');
+Route::get('unanswered', 'QuestionsController@unanswered');
+
+
+// manage authentication and registration of members
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
