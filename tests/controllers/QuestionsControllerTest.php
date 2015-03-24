@@ -20,6 +20,20 @@ class QuestionsControllerTest extends TestCase {
         Mockery::close();
     }
     
+    public function testIndexFetchesNewest()
+    {   
+        $questions = new Illuminate\Database\Eloquent\Collection;
+        $this->mocks['question']
+            ->shouldReceive('newest')
+            ->once()
+            ->andReturn($questions);
+        
+        $response = $this->call('GET', '');
+        
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertViewHas('questions', $questions);
+    }
+    
     // public function testQuestionIndexGetsLatestQuestions()
     // {
     //     $this->mocks['question']
@@ -75,18 +89,18 @@ class QuestionsControllerTest extends TestCase {
     //     $this->assertViewHas('question', $question);
     // }
     
-    public function testStoreWithInvalidParams()
-    {
-        // $this->mocks['auth'] = Mockery::mock('Illuminate\Auth\AuthManager');
+    // public function testStoreWithInvalidParams()
+    // {
+    //     // $this->mocks['auth'] = Mockery::mock('Illuminate\Auth\AuthManager');
         
-        // $this->app->instance('Illuminate\Auth\AuthManager', $this->mocks['auth']);
+    //     // $this->app->instance('Illuminate\Auth\AuthManager', $this->mocks['auth']);
         
-        $response = $this->call('POST', 'questions', array(
-            '_token' => csrf_token(),
-        ));
+    //     $response = $this->call('POST', 'questions', array(
+    //         '_token' => csrf_token(),
+    //     ));
         
-        $this->assertRedirectedTo('questions');
-    }
+    //     $this->assertRedirectedTo('questions');
+    // }
 }
 
 

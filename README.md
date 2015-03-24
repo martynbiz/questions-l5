@@ -13,9 +13,9 @@ easier to organise subfolder routes (e.g. admin/.. account/..)
 
 ? How to set /create as /ask
 ? Why is /5 not showing
-? build caching into models
-? custom paths e.g. /ask
+? build caching into models - http://laravel.com/docs/4.2/queries (caching queries)
 ? can view return json when 
+? how to test scope methods with Mockery (e.g. newest, not scopeNewest)
 
 THINGS/ WAYS TO TEST
 
@@ -25,6 +25,9 @@ THINGS/ WAYS TO TEST
 TODO
 
 assets - yield, revise again
+
+hometabs
+- load with ajax
 
 models validation - answers, tag, follow, etc
 auth - change registration page
