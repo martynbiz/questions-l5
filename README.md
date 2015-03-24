@@ -3,18 +3,14 @@ Adv of laravel
 tinker tool
 dd()
 gulp for styles, js
-clean
+much cleaner
 
 
 ..adv for QA?
 
 easier to organise subfolder routes (e.g. admin/.. account/..)
 
-
-? How to set /create as /ask
-? Why is /5 not showing
-? build caching into models
-? custom paths e.g. /ask
+? build caching into models - http://laravel.com/docs/4.2/queries (removed in l5?)
 ? can view return json when 
 
 THINGS/ WAYS TO TEST
@@ -24,7 +20,9 @@ THINGS/ WAYS TO TEST
 
 TODO
 
-assets - yield, revise again
+Theme
+assets - revise again
+bring in CSS, js
 
 models validation - answers, tag, follow, etc
 auth - change registration page

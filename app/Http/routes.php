@@ -13,12 +13,15 @@
 
 // questions routes
 
+// convenience routes
+Route::get('/', 'QuestionsController@index');
 Route::get('/{id}', 'QuestionsController@show')->where('id', '[0-9]+');
 Route::get('/ask', 'QuestionsController@create');
-Route::resource('/', 'QuestionsController');
-
 Route::get('popular', 'QuestionsController@popular');
 Route::get('unanswered', 'QuestionsController@unanswered');
+
+// restful routes: index, show, create, store, edit, update, and destroy
+Route::resource('questions', 'QuestionsController');
 
 
 // manage authentication and registration of members
