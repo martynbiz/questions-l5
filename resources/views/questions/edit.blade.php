@@ -2,8 +2,8 @@
 
 @section('content')
     <ol class="breadcrumb">
-        <li><a href="{{ route('index') }}">Home</a></li>
-        <li><a href="{{ route('show', [$question->id]) }}">{{$question->title}}</a></li>
+        <li><a href="{{ url('/') }}">Home</a></li>
+        <li><a href="{{ url($question->id) }}">{{$question->title}}</a></li>
         <li class="active">Edit</li>
     </ol>
     

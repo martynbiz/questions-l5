@@ -87,7 +87,7 @@ class QuestionsController extends Controller {
     {
         $auth->user()->questions()->create( $request->all() );
         
-        return redirect()->route('index')->with([
+        return redirect()->to('/')->with([
             'flash_message' => 'A new question has been created',
             // 'flash_message_important' => true,
 
@@ -116,7 +116,7 @@ class QuestionsController extends Controller {
         // update the question with the request params
         $question->update($request->all());
         
-        return redirect()->route('show', ['id' => $id])->with([
+        return redirect()->to($id)->with([
             'flash_message' => 'Question has been updated',
             // 'flash_message_important' => true,
         ]);

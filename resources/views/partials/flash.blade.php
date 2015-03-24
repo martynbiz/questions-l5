@@ -2,7 +2,7 @@
     <div class="alert alert-success {{ Session::has('flash_message_important') ? 'flash-important' : '' }}">
         @if (Session::has('flash_message_important'))
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        @endif;
+        @endif
         
         {{ session('flash_message') }}
     </div>
