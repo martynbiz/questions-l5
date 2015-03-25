@@ -37,7 +37,10 @@ Tags
 
 
 models validation - answers, tag, follow, etc
-auth - change registration page
+
+auth 
+- only show edit/ delete if authenticated and own the file (acl?)
+- change registration page
 
 
 test - models, controllers (uses requests?), requests?

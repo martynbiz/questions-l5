@@ -4,6 +4,7 @@ class Answer extends Model {
     
 	protected $fillable = [
         'content',
+        'question_id',
     ];
     
     /**

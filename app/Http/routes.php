@@ -24,6 +24,12 @@ Route::get('/ask', 'QuestionsController@create');
 Route::resource('questions', 'QuestionsController');
 
 
+// answers routes
+
+// restful routes: index, show, create, store, edit, update, and destroy
+Route::resource('answers', 'AnswersController');
+
+
 // manage authentication and registration of members
 
 Route::controllers([

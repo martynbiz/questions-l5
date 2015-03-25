@@ -64,7 +64,11 @@ class QuestionsController extends Controller {
     public function show($id)
     {
         // will throw an exception if not found
-        $question = $this->question->findOrFail($id);
+        $question = $this->question
+            ->with('answers')
+            ->with('tags')
+            ->with('user')
+            ->findOrFail($id);
         
         return view('questions.show', compact('question'));
     }
@@ -121,5 +125,16 @@ class QuestionsController extends Controller {
             'flash_message' => 'Question has been updated',
             // 'flash_message_important' => true,
         ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        //
     }
 }
