@@ -1,16 +1,22 @@
 <?php
 
+use App\Question;
+use App\Tag;
+use Illuminate\Database\Eloquent\Collection;
+
+// use Illuminate\Support\Facades\Auth;
+
 class QuestionsControllerTest extends TestCase {
 
     protected $mocks = [];
     
     public function setUp()
-    {   
+    {
         parent::setUp();
         
-        $this->mocks['question'] = Mockery::mock('App\Question');
-        
-        $this->app->instance('App\Question', $this->mocks['question']);
+        // mock Question
+        $this->mocks['Question'] = Mockery::mock('App\Question');
+        $this->app->instance('App\Question', $this->mocks['Question']);
         
         Session::start();
     }
@@ -20,10 +26,10 @@ class QuestionsControllerTest extends TestCase {
         Mockery::close();
     }
     
-    public function testIndexFetchesNewest()
+    public function testIndexRouteFetchesNewestQuestions()
     {   
-        $questions = new Illuminate\Database\Eloquent\Collection;
-        $this->mocks['question']
+        $questions = new Collection;
+        $this->mocks['Question']
             ->shouldReceive('newest')
             ->once()
             ->andReturn($questions);
@@ -34,15 +40,76 @@ class QuestionsControllerTest extends TestCase {
         $this->assertViewHas('questions', $questions);
     }
     
+    public function testPopularRouteFetchesPopularQuestions()
+    {   
+        $questions = new Collection;
+        $this->mocks['Question']
+            ->shouldReceive('popular')
+            ->once()
+            ->andReturn($questions);
+        
+        $response = $this->call('GET', 'popular');
+        
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertViewHas('questions', $questions);
+    }
+    
+    public function testUnansweredRouteFetchesUnansweredQuestions()
+    {   
+        $questions = new Collection;
+        $this->mocks['Question']
+            ->shouldReceive('unanswered')
+            ->once()
+            ->andReturn($questions);
+        
+        $response = $this->call('GET', 'unanswered');
+        
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertViewHas('questions', $questions);
+    }
+    
+    public function testShowRouteFetchesQuestionWithValidId()
+    {   
+        $id = 1;
+        $question = new Question;
+        $this->mocks['Question']
+            ->shouldReceive('findOrFail')
+            ->with($id)
+            ->once()
+            ->andReturn($question);
+        
+        $response = $this->call('GET', $id);
+        
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertViewHas('question', $question);
+    }
+    
+    // public function testPostQuestionThrowsExceptionWhenTokenIsMissing()
+    // {
+        
+    // }
+    
+    // public function testPostQuestionWhenAuthenticated()
+    // {   
+    //     Auth::shouldReceive('check')->once()->andReturn(true);
+        
+    //     $response = $this->call('POST', 'questions', array(
+    //         'title' => 'Test question',
+    //         '_token' => csrf_token(),
+    //     ));
+        
+    //     // $this->assertEquals(200, $response->getStatusCode());
+    // }
+    
     // public function testQuestionIndexGetsLatestQuestions()
     // {
-    //     $this->mocks['question']
+    //     $this->mocks['Question']
     //        ->shouldReceive('latest')
     //        ->once()
     //        ->andReturnSelf();
         
-    //     $questions = new Illuminate\Database\Eloquent\Collection;
-    //     $this->mocks['question']
+    //     $questions = new Collection;
+    //     $this->mocks['Question']
     //         ->shouldReceive('get')
     //         ->once()
     //         ->andReturn($questions);
@@ -75,7 +142,7 @@ class QuestionsControllerTest extends TestCase {
         
     //     $question = new App\Question();
         
-    //     $this->mocks['question']
+    //     $this->mocks['Question']
     //         ->shouldReceive('findOrFail')
     //         ->once()
     //         ->with($id)
@@ -91,9 +158,9 @@ class QuestionsControllerTest extends TestCase {
     
     // public function testStoreWithInvalidParams()
     // {
-    //     // $this->mocks['auth'] = Mockery::mock('Illuminate\Auth\AuthManager');
+    //     // $this->mocks['Auth'] = Mockery::mock('Illuminate\Auth\AuthManager');
         
-    //     // $this->app->instance('Illuminate\Auth\AuthManager', $this->mocks['auth']);
+    //     // $this->app->instance('Illuminate\Auth\AuthManager', $this->mocks['Auth']);
         
     //     $response = $this->call('POST', 'questions', array(
     //         '_token' => csrf_token(),
@@ -113,15 +180,15 @@ class QuestionsControllerTest extends TestCase {
 //         parent::setUp();
         
 //         // this is the questions model for this test case
-//         $this->mocks['question']s['question'] = $this->getMockBuilder('App\Question')
+//         $this->mocks['Question']s['Question'] = $this->getMockBuilder('App\Question')
 //             ->disableOriginalConstructor()
 //             ->getMock();
         
 //         // and this is the questions() which return the hasMany (for creating, updating etc)
-//         // $this->mocks['question']s['authUser']
+//         // $this->mocks['Question']s['authUser']
 //         //     ->shouldReceive('questions')
 //         //     ->once()
-//         //     ->andReturn($this->mocks['question']s['hasMany']);
+//         //     ->andReturn($this->mocks['Question']s['hasMany']);
 //     }
     
 //     public function tearDown()
@@ -131,18 +198,18 @@ class QuestionsControllerTest extends TestCase {
     
 //     // public function testQuestionIndexGetsLatestQuestions()
 //     // {
-//     //     $this->mocks['question']s['question']
+//     //     $this->mocks['Question']s['Question']
 //     //        ->shouldReceive('latest')
 //     //        ->once()
 //     //        ->andReturnSelf();
         
-//     //     $questions = new Illuminate\Database\Eloquent\Collection;
-//     //     $this->mocks['question']s['question']
+//     //     $questions = new Collection;
+//     //     $this->mocks['Question']s['Question']
 //     //         ->shouldReceive('get')
 //     //         ->once()
 //     //         ->andReturn($questions);
         
-//     //     $this->app->instance('App\Question', $this->mocks['question']s['question']);
+//     //     $this->app->instance('App\Question', $this->mocks['Question']s['Question']);
         
 //     //     // dispatch
         
@@ -172,13 +239,13 @@ class QuestionsControllerTest extends TestCase {
         
 //         // $question = new App\Question();
         
-//         // $this->mocks['question']s['question']
+//         // $this->mocks['Question']s['Question']
 //         //     ->expects($this->once())
 //         //     ->method('findOrFail')
 //         //     ->with($id)
 //         //     ->willReturn($question);
         
-//         // $this->app->instance('App\Question', $this->mocks['question']s['question']);
+//         // $this->app->instance('App\Question', $this->mocks['Question']s['Question']);
         
 //         // dispatch
         
@@ -205,23 +272,23 @@ class QuestionsControllerTest extends TestCase {
     
 //     public function testStoreWithInvalidParams()
 //     {
-//         // $this->mocks['question']s['auth']
+//         // $this->mocks['Question']s['Auth']
 //         //     ->expects($this->once())
 //         //     ->method('user')
-//         //     ->willReturn($this->mocks['question']s['authUser']);
+//         //     ->willReturn($this->mocks['Question']s['authUser']);
         
-//         // $this->mocks['question']s['authUser']
+//         // $this->mocks['Question']s['authUser']
 //         //     ->expects($this->once())
 //         //     ->method('questions')
-//         //     ->willReturn($this->mocks['question']s['hasMany']);
+//         //     ->willReturn($this->mocks['Question']s['hasMany']);
         
-//         // $this->mocks['question']s['hasMany']
+//         // $this->mocks['Question']s['hasMany']
 //         //     ->expects($this->once())
 //         //     ->method('create')
 //         //     ->with(array());
         
 //         // // assert that create is called via auth middleware
-//         // $this->mocks['question']s['hasMany']
+//         // $this->mocks['Question']s['hasMany']
 //         //     ->shouldReceive('create')
 //         //     ->once()
 //         //     ->with();

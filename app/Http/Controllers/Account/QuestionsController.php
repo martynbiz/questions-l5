@@ -1,5 +1,9 @@
 <?php namespace App\Http\Controllers\Account;
 
+/**
+ * This controller is only really used to list all questions
+ */
+
 use App\Http\Requests\QuestionRequest;
 use App\Http\Controllers\Controller;
 
@@ -12,64 +16,40 @@ use Illuminate\Auth\AuthManager;
 
 class QuestionsController extends Controller {
     
-	protected $question;
+	/**
+     * Currently authenticated user
+     * @var App\User
+     */
+    protected $user;
     
-    public function __construct(Question $question)
+    public function __construct(AuthManager $auth)
     {
-        // this resource requires the auth to login
-        $this->middleware('auth');
+        // set our auth instance
+        $this->user = $this->user;
         
-        $this->question = $question;
+        // apply auth middleware to authenticate all pages.
+        $this->middleware('auth');
     }
     
-    public function index(AuthManager $auth)
+    /**
+     * List questions that the user owns
+     */
+    public function index()
     {
-        $questions = $auth->user()->questions()
-            ->latest()
-            ->get();
+        $questions = $this->user->questions()
+            ->all();
         
         return view('account.questions.index', compact('questions'));
     }
     
-    public function show(AuthManager $auth, $id)
+    /**
+     * List questions that this user is following
+     */
+    public function following()
     {
-        $question = $auth->user()->questions()
-            ->findOrFail($id);
+        $questions = $this->user->questions()
+            ->following();
         
-        return view('account.questions.show', compact('question'));
+        return view('account.questions.index', compact('questions'));
     }
-    
-    public function create()
-    {
-        return view('account.questions.create');
-    }
-    
-    public function store(AuthManager $auth, QuestionRequest $request)
-    {
-        $auth->user()->questions()
-            ->create( $request->all() );
-        
-        return redirect('account.questions')->with([
-            'flash_message' => 'A new question has been created',
-        ]);
-    }
-    
-    public function edit(AuthManager $auth, $id)
-    {
-        $question = $auth->user()->questions()
-            ->findOrFail($id);
-        
-        return view('account.questions.edit', compact('question'));
-    }
-    
-    public function update(AuthManager $auth, QuestionRequest $request, $id)
-    {
-        $question = $auth->user()->questions()
-            ->findOrFail($id);
-        
-        $question->update( $request->all() );
-        
-        return redirect('account.questions');
-    }
-
 }

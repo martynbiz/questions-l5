@@ -24,8 +24,8 @@ class QuestionsController extends Controller {
         $this->question = $question;
         
         // apply auth middleware to authenticate certain pages. All other
-        // page will require that the user logs in.
-        $this->middleware('auth', ['except' => ['index', 'show']]);
+        // page are public.
+        $this->middleware('auth', ['only' => ['create', 'store', 'edit', 'update']]);
     }
     
     /**
@@ -85,6 +85,7 @@ class QuestionsController extends Controller {
      */
     public function store(AuthManager $auth, QuestionRequest $request)
     {
+        // this will create the question for this user
         $auth->user()->questions()->create( $request->all() );
         
         return redirect()->to('/')->with([

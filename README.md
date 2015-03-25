@@ -23,17 +23,23 @@ THINGS/ WAYS TO TEST
 
 TODO
 
-Theme
-assets - revise again
-bring in CSS, js
+Answers
+- answer from question page (redirect back to question show)
+- edit
+- delete
+- use controller nesting e.g. /5/answers/12/edit
 
-hometabs
-- load with ajax
+Tags
+- build admin interface
+- display multi-select in create/ edit
+- add tags when asking
+
+
 
 models validation - answers, tag, follow, etc
 auth - change registration page
-tags
-ANSWERS: use controller nesting e.g. /5/answers/12/edit
+
+
 test - models, controllers (uses requests?), requests?
 infinate scrolling - laravel respond json; backbone, mustache templates
 admin - users, tags, questions, answers, 
@@ -44,6 +50,12 @@ sso - remove the auth library from laravel, move into composer - Metroworks\Auth
 solr
 redesign topnav - empty panels, loaded with ajax; clicking main buttons takes you somewhere; slide down
 
+Theme
+assets - revise again
+bring in CSS, js
+
+hometabs
+- load with ajax
 
 tags
 - tag buttons on create/edit
