@@ -4,17 +4,17 @@ tinker tool
 dd()
 gulp for styles, js
 much cleaner
+array_* functions
 
 
 ..adv for QA?
 
 easier to organise subfolder routes (e.g. admin/.. account/..)
 
-? How to set /create as /ask
-? Why is /5 not showing
+
 ? build caching into models - http://laravel.com/docs/4.2/queries (caching queries - removed?)
 ? can view return json when 
-? how to test scope methods with Mockery (e.g. newest, not scopeNewest)
+
 
 THINGS/ WAYS TO TEST
 
@@ -30,13 +30,24 @@ Answers
 - use controller nesting e.g. /5/answers/12/edit
 
 Tags
-- build admin interface
-- display multi-select in create/ edit
+- build admin interface - create, edit, pagination
+- admin auth/ acl
+- display multi-select in edit
 - add tags when asking
 
+Questions
+- more questions button
+*save question - update slug event
 
+ACL -- need roles table
+$user->isAdmin()
+$user->isAnswerer()
+$user->isSubscriber()
+$user->canUpdate($question) // or $answer
+$user->canDelete($question) // or $answer
 
-models validation - answers, tag, follow, etc
+!hide email from json
+
 
 auth 
 - only show edit/ delete if authenticated and own the file (acl?)
@@ -63,6 +74,10 @@ hometabs
 tags
 - tag buttons on create/edit
 - 
+
+points
+
+load test - zend qa vs laravel
 
 
 DOCS

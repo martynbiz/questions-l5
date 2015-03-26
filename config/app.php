@@ -196,6 +196,7 @@ return [
 		
 		'Form'      => 'Illuminate\Html\FormFacade',
 		'Html'      => 'Illuminate\Html\HtmlFacade',
+		'Str'       => 'Illuminate\Support\Str',
 
 	],
 

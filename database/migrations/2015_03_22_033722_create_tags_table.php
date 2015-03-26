@@ -19,6 +19,7 @@ class CreateTagsTable extends Migration {
 			/// fields
 			
 			$table->string('name');
+			$table->string('slug');
 			
 			$table->timestamps();
 		});

@@ -27,7 +27,13 @@ Route::resource('questions', 'QuestionsController');
 // answers routes
 
 // restful routes: index, show, create, store, edit, update, and destroy
-Route::resource('answers', 'AnswersController');
+Route::resource('answers', 'AnswersController', ['only' => ['store', 'edit', 'update', 'destroy']]);
+
+
+// tags routes
+
+Route::get('tags', 'TagsController@index');
+Route::get('tags/{id}/{slug?}', 'TagsController@show');
 
 
 // manage authentication and registration of members
@@ -42,6 +48,7 @@ Route::controllers([
 
 Route::group(['prefix' => 'admin'], function() {
     Route::resource('questions', 'Admin\QuestionsController');
+    Route::resource('tags', 'Admin\TagsController');
 });
 
 

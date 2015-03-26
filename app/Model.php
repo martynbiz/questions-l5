@@ -5,6 +5,11 @@ use Carbon\Carbon;
 
 class Model extends Eloquent {
     
+    /**
+     * This just stops pivot appearing in the result
+     */
+    protected $hidden = array('pivot');
+    
     // attributes
     
     /**

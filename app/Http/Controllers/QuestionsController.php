@@ -1,5 +1,7 @@
 <?php namespace App\Http\Controllers;
 
+use Response;
+
 use App\Http\Requests\QuestionRequest;
 use App\Http\Controllers\Controller;
 
@@ -35,7 +37,8 @@ class QuestionsController extends Controller {
     {
         $questions = $this->question->newest();
         
-        return view('questions.index', compact('questions'));
+        // render the view script, or json if ajax request
+        return $this->render('questions.index', compact('questions'));
     }
     
     /**
@@ -45,7 +48,8 @@ class QuestionsController extends Controller {
     {
         $questions = $this->question->popular();
         
-        return view('questions.index', compact('questions'));
+        // render the view script, or json if ajax request
+        return $this->render('questions.index', compact('questions'));
     }
     
     /**
@@ -55,7 +59,8 @@ class QuestionsController extends Controller {
     {
         $questions = $this->question->unanswered();
         
-        return view('questions.index', compact('questions'));
+        // render the view script, or json if ajax request
+        return $this->render('questions.index', compact('questions'));
     }
     
     /**
@@ -70,7 +75,8 @@ class QuestionsController extends Controller {
             ->with('user')
             ->findOrFail($id);
         
-        return view('questions.show', compact('question'));
+        // render the view script, or json if ajax request
+        return $this->render('questions.show', compact('question'));
     }
     
     /**
@@ -81,7 +87,8 @@ class QuestionsController extends Controller {
         // get the tags so that we can display tag list
         $tags = $tag->all();
         
-        return view('questions.create', compact('tags'));
+        // render the view script, or json if ajax request
+        return $this->render('questions.create', compact('tags'));
     }
     
     /**
@@ -89,13 +96,20 @@ class QuestionsController extends Controller {
      */
     public function store(AuthManager $auth, QuestionRequest $request)
     {
-        // this will create the question for this user
-        $auth->user()->questions()->create( $request->all() );
+        // save question
+        $question = $auth->user()->questions()->create( $request->all() );
         
+        // save tags
+        foreach($request->input('tags') as $tagId) {
+            $question->tags()->attach($tagId);
+        }
+        
+        // *award points
+        
+        // redirect
         return redirect()->to('/')->with([
             'flash_message' => 'A new question has been created',
             // 'flash_message_important' => true,
-
         ]);
     }
     
@@ -107,7 +121,8 @@ class QuestionsController extends Controller {
         // will throw an exception if not found
         $question = $auth->user()->questions()->findOrFail($id);
         
-        return view('questions.edit', compact('question'));
+        // render the view script, or json if ajax request
+        return $this->render('questions.edit', compact('question'));
     }
     
     /**
