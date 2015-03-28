@@ -26,6 +26,9 @@ class QuestionsControllerTest extends TestCase {
         Mockery::close();
     }
     
+    
+    // conveneince routes
+    
     public function testIndexRouteFetchesNewestQuestions()
     {   
         $questions = new Collection;
@@ -36,7 +39,7 @@ class QuestionsControllerTest extends TestCase {
         
         $response = $this->call('GET', '');
         
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertResponseStatus(200);
         $this->assertViewHas('questions', $questions);
     }
     
@@ -50,7 +53,7 @@ class QuestionsControllerTest extends TestCase {
         
         $response = $this->call('GET', 'popular');
         
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertResponseStatus(200);
         $this->assertViewHas('questions', $questions);
     }
     
@@ -64,25 +67,147 @@ class QuestionsControllerTest extends TestCase {
         
         $response = $this->call('GET', 'unanswered');
         
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertResponseStatus(200);
         $this->assertViewHas('questions', $questions);
     }
     
-    public function testShowRouteFetchesQuestionWithValidId()
+    /**
+     * @dataProvider getShowRoutes
+     */
+    public function testShowRoutes($id, $route)
     {   
-        $id = 1;
+        $id = $id;
         $question = new Question;
+        
+        // assert that it attaches answers
+        $this->mocks['Question']
+            ->shouldReceive('with')
+            ->with('answers')
+            ->once()
+            ->andReturnSelf();
+        
+        // assert that it attaches tags
+        $this->mocks['Question']
+            ->shouldReceive('with')
+            ->with('tags')
+            ->once()
+            ->andReturnSelf();
+        
+        // assert that it atttaches user
+        $this->mocks['Question']
+            ->shouldReceive('with')
+            ->with('user')
+            ->once()
+            ->andReturnSelf();
+        
+        // assert that it uses findOrFail
         $this->mocks['Question']
             ->shouldReceive('findOrFail')
             ->with($id)
             ->once()
             ->andReturn($question);
         
-        $response = $this->call('GET', $id);
+        $response = $this->call('GET', $route);
         
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertResponseStatus(200);
         $this->assertViewHas('question', $question);
     }
+    
+    /**
+     * will return id and routes for the show route test as 
+     * show has multiple routes (e.g. /1)
+     */
+    public function getShowRoutes()
+    {
+        return array(
+            array(1, 'questions/1'),
+            array(1, '1'),
+        );
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // UNDER CONSTRUCTION
+    
+    // public function testCreateRedirectsWhenUserNotAuthenticated()
+    // {
+    //     $response = $this->call('GET', 'questions/create');
+        
+    //     $this->assertRedirectedTo('auth/login');
+    // }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // OLD TESTS (SOME BROKEN)
+    
+    
+    
     
     // public function testPostQuestionThrowsExceptionWhenTokenIsMissing()
     // {

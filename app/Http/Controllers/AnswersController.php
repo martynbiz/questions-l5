@@ -3,23 +3,27 @@
 use App\Http\Requests\AnswerRequest;
 use App\Http\Controllers\Controller;
 
+use App\Question;
 use App\Answer;
 
 use Illuminate\Auth\AuthManager;
 
 class AnswersController extends Controller {
 
+	protected $answer;
+	protected $auth;
+	
 	/**
      * 
      */
-    public function __construct(Answer $answer)
+    public function __construct(AuthManager $auth, Answer $answer)
     {
         // set our controllers model
         $this->answer = $answer;
+        $this->auth = $auth;
         
-        // apply auth middleware to authenticate certain pages. All other
-        // page are public.
-        // $this->middleware('auth', ['only' => ['create', 'store', 'edit', 'update']]);
+        // apply auth middleware to authenticate all pages.
+        $this->middleware('auth');
     }
 	
 	/**
@@ -47,13 +51,24 @@ class AnswersController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(AuthManager $auth, AnswerRequest $request)
+	public function store(AnswerRequest $request, Question $question)
 	{
-		$question = $auth->user()->answers()->create( $request->all() );
+		$user = $this->auth->user();
 		
-		return redirect()->to($question->id)->with([
+		// *has this user already answered this question?
+		$question = $question->find( $request->get('question_id') );
+		if ($user->hasAnswered($question)) {
+			return redirect()->to($question->id)->with([
+	            'flash_message' => 'You have already given an answer for this question',
+	        ]);
+		}
+		
+		// create answer
+		$answer = $user->answers()->create( $request->all() );
+		
+		// 
+		return redirect()->to($answer->question_id)->with([
             'flash_message' => 'Thank you for your answer',
-            // 'flash_message_important' => true,
         ]);
 	}
 
@@ -76,7 +91,11 @@ class AnswersController extends Controller {
 	 */
 	public function edit($id)
 	{
-		//
+		// will throw an exception if not found
+        $answer = $this->auth->user()->answers()->findOrFail($id);
+        
+        // render the view script, or json if ajax request
+        return $this->render('answers.edit', compact('answer'));
 	}
 
 	/**
@@ -85,9 +104,17 @@ class AnswersController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update(AnswerRequest $request, $id)
 	{
-		//
+		// will throw an exception if not found
+        $answer = $this->auth->user()->answers()->findOrFail($id);
+        
+        // update the answer with the request params
+        $answer->update($request->all());
+        
+        return redirect()->to($answer->question_id)->with([
+            'flash_message' => 'Question has been updated',
+        ]);
 	}
 
 	/**
@@ -98,7 +125,17 @@ class AnswersController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		//
+		$answer = $this->auth->user()->answers()->findOrFail($id);
+		
+		// capture the questionId before we delete
+		$questionId = $answer->question_id;
+		
+		// will throw an exception if not found
+        $answer->delete();
+        
+        return redirect()->to($questionId)->with([
+            'flash_message' => 'Question has been updated',
+        ]);
 	}
 
 }

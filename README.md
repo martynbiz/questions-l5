@@ -1,4 +1,4 @@
-Adv of laravel
+Adv of laravel ( ͡° ͜ʖ ͡°)
 
 tinker tool
 dd()
@@ -13,21 +13,15 @@ easier to organise subfolder routes (e.g. admin/.. account/..)
 
 
 ? build caching into models - http://laravel.com/docs/4.2/queries (caching queries - removed?)
-? can view return json when 
+http://laravel.io/forum/03-28-2015-if-i-wanted-to-create-a-simple-library-class-api-client-in-laravel-5-where-would-i-put-it
 
 
 THINGS/ WAYS TO TEST
-
-- models: validate, attributes, fillable, (see book)
+- controllers: routes are ok
+- models: relationships, custom methods
 - 
 
 TODO
-
-Answers
-- answer from question page (redirect back to question show)
-- edit
-- delete
-- use controller nesting e.g. /5/answers/12/edit
 
 Tags
 - build admin interface - create, edit, pagination
@@ -39,19 +33,22 @@ Questions
 - more questions button
 *save question - update slug event
 
-ACL -- need roles table
-$user->isAdmin()
-$user->isAnswerer()
-$user->isSubscriber()
-$user->canUpdate($question) // or $answer
-$user->canDelete($question) // or $answer
-
 !hide email from json
 
 
 auth 
 - only show edit/ delete if authenticated and own the file (acl?)
 - change registration page
+
+
+
+composer package: -- look at providers too, i'm not sure what's different about them
+metroworks\laravel-tools
+- Metroworks\Laravel5\Middleware\SamlPassiveLogin
+- Metroworks\ApiClient\Reputation
+- Metroworks\ApiClient\Subjects
+- Metroworks\ApiClient\Reviews
+
 
 
 test - models, controllers (uses requests?), requests?

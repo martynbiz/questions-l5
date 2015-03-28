@@ -17,7 +17,7 @@
 Route::get('/', 'QuestionsController@index');
 Route::get('popular', 'QuestionsController@popular');
 Route::get('unanswered', 'QuestionsController@unanswered');
-Route::get('/{id}', 'QuestionsController@show')->where('id', '[0-9]+');
+Route::get('/{id}/{slug?}', 'QuestionsController@show')->where('id', '[0-9]+');
 Route::get('/ask', 'QuestionsController@create');
 
 // restful routes: index, show, create, store, edit, update, and destroy
@@ -27,7 +27,7 @@ Route::resource('questions', 'QuestionsController');
 // answers routes
 
 // restful routes: index, show, create, store, edit, update, and destroy
-Route::resource('answers', 'AnswersController', ['only' => ['store', 'edit', 'update', 'destroy']]);
+Route::resource('answers', 'AnswersController', ['only' => ['edit', 'update', 'destroy']]);
 
 
 // tags routes

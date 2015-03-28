@@ -47,5 +47,62 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->hasMany('App\Answer');
     }
-
+    
+    
+    // acl stuff
+    
+    /**
+     * 
+     */
+    public function isAdmin() {
+        return ($this->role == 'admin');
+    }
+    
+    /**
+     * 
+     */
+    public function isAnswerer() {
+        return ($this->role == 'answerer');
+    }
+    
+    /**
+     * 
+     */
+    public function isSubscriber() {
+        return ($this->role == 'subscriber');
+    }
+     
+    /**
+     * Checks if the item passed belongs to this user
+     */
+    public function isOwnerOf($item) {
+        return ($item->user_id == $this->id);
+    }
+    
+    /**
+     * Checks if the user is the owner of the item, or admin
+     */
+    public function canUpdate($item) {
+        return ($this->isAdmin() or $item->user_id == $this->id);
+    }
+     
+    /**
+     * Checks if the user is the owner of the item, or admin
+     */
+    public function canDelete($item) {
+        return ($this->isAdmin() or $item->user_id == $this->id);
+    }
+     
+    /**
+     * Check if this question has been answered already by this user
+     */
+    public function hasAnswered($question) {
+        foreach($question->answers as $answer) {
+            if ($answer->user_id == $this->id) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 }

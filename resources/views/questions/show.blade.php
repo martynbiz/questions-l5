@@ -9,25 +9,41 @@
     <div class="body">{{$question->content}}</div>
     
     <div>
-        <a href="{{route('questions.edit', [$question->id])}}" class="btn btn-default">Edit</a>
+        {!! Form::open(array('route' => array('questions.destroy', $question->id), 'method' => 'delete', 'id' => 'questionDelete')) !!}
+            <a href="{{route('questions.edit', [$question->id])}}">Edit</a> |
+            <a href="#" onclick="document.getElementById('questionDelete').submit(); return false;">Delete</a>
+        {!! Form::close() !!}
     </div>
     
     <hr>
     
     <h2>{{$question->answers->count()}} answers</h2>
     
-    <p>Write your own answer</p>
+    @foreach($question->answers as $answer)
+        <div class="answer">
+            <div class="info">Answered by {{$answer->user->name}} | {{$answer->created_at_formatted}}</div>
+            <div>{{{$answer->content}}}</div>
+            
+            @if (Auth::user() and (Auth::user()->canUpdate($answer) or Auth::user()->canDelete($answer)))
+                <div>
+                    {!! Form::open(array('route' => array('answers.destroy', $answer->id), 'method' => 'delete', 'id' => 'answerDelete')) !!}
+                        @if (Auth::user()->canUpdate($answer))
+                            <a href="{{route('answers.edit', [$answer->id])}}">Edit</a>
+                        @endif |
+                        @if (Auth::user()->canDelete($answer))
+                            <a href="#" onclick="document.getElementById('answerDelete').submit(); return false;">Delete</a>
+                        @endif
+                    {!! Form::close() !!}
+                </div>
+            @endif
+        </div>
+    @endforeach
     
-    {!! Form::open(['action' => 'AnswersController@store', 'method' => 'POST']) !!}
-        <div class="form-group">
-            {!! Form::label('content', 'Content:') !!}
-            {!! Form::textarea('content', null, ['class'=>'form-control']) !!}
-        </div>
+    @if (Auth::user() and !Auth::user()->hasAnswered($question) and !Auth::user()->isOwnerOf($question))
+        <p>Write your own answer</p>
         
-        {!! Form::hidden('question_id', $question->id) !!}
-
-        <div class="form-group">
-            {!! Form::submit('Answer', ['class'=>'btn btn-primary']) !!}
-        </div>
-    {!! Form::close() !!}
+        {!! Form::open(['action' => 'AnswersController@store', 'method' => 'POST']) !!}
+            @include ('answers.partials.form', ['btnText' => 'Answer question'])
+        {!! Form::close() !!}
+    @endif
 @stop
