@@ -10,7 +10,7 @@
 
 <div class="form-group">
     {!! Form::label('tags', 'Tags:') !!}
-    {!! Form::select('tags', $tags->lists('name', 'id'), null, ['multiple'=>'multiple', 'name'=>'tags[]']) !!}
+    {!! Form::select('tags', $tags->lists('name', 'id'), $question->tags->lists('id'), ['multiple'=>'multiple', 'name'=>'tags[]']) !!}
 </div>
 
 <div class="form-group">

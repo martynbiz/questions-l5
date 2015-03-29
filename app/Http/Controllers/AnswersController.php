@@ -11,16 +11,14 @@ use Illuminate\Auth\AuthManager;
 class AnswersController extends Controller {
 
 	protected $answer;
-	protected $auth;
 	
 	/**
      * 
      */
-    public function __construct(AuthManager $auth, Answer $answer)
+    public function __construct(Answer $answer)
     {
         // set our controllers model
         $this->answer = $answer;
-        $this->auth = $auth;
         
         // apply auth middleware to authenticate all pages.
         $this->middleware('auth');
@@ -51,9 +49,9 @@ class AnswersController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(AnswerRequest $request, Question $question)
+	public function store(AuthManager $auth, AnswerRequest $request, Question $question)
 	{
-		$user = $this->auth->user();
+		$user = $auth->user();
 		
 		// *has this user already answered this question?
 		$question = $question->find( $request->get('question_id') );
@@ -89,10 +87,10 @@ class AnswersController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit($id)
+	public function edit(AuthManager $auth, $id)
 	{
 		// will throw an exception if not found
-        $answer = $this->auth->user()->answers()->findOrFail($id);
+        $answer = $auth->user()->answers()->findOrFail($id);
         
         // render the view script, or json if ajax request
         return $this->render('answers.edit', compact('answer'));
@@ -104,10 +102,10 @@ class AnswersController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update(AnswerRequest $request, $id)
+	public function update(AuthManager $auth, AnswerRequest $request, $id)
 	{
 		// will throw an exception if not found
-        $answer = $this->auth->user()->answers()->findOrFail($id);
+        $answer = $auth->user()->answers()->findOrFail($id);
         
         // update the answer with the request params
         $answer->update($request->all());
@@ -123,9 +121,9 @@ class AnswersController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy(AuthManager $auth, $id)
 	{
-		$answer = $this->auth->user()->answers()->findOrFail($id);
+		$answer = $auth->user()->answers()->findOrFail($id);
 		
 		// capture the questionId before we delete
 		$questionId = $answer->question_id;
@@ -134,7 +132,7 @@ class AnswersController extends Controller {
         $answer->delete();
         
         return redirect()->to($questionId)->with([
-            'flash_message' => 'Question has been updated',
+            'flash_message' => 'Question has been deleted',
         ]);
 	}
 

@@ -4,8 +4,9 @@ use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 use App\Tag;
+use App\Question;
 
-// use Illuminate\Support\Str;
+use Illuminate\Support\Str;
 
 class EventServiceProvider extends ServiceProvider {
 
@@ -29,6 +30,13 @@ class EventServiceProvider extends ServiceProvider {
 	public function boot(DispatcherContract $events)
 	{
 		parent::boot($events);
+		
+		// set Tag slug
+		Question::saving(function($question)
+		{
+		    //slugify name
+		    $question->slug = Str::slug($question->title);
+		});
 		
 		// set Tag slug
 		Tag::saving(function($tag)

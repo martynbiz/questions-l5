@@ -1,21 +1,21 @@
 <?php namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\TagRequest;
+use App\Http\Requests\UserRequest;
 use App\Http\Controllers\Controller;
 
-use App\Tag;
+use App\User;
 
 use Illuminate\Http\Request;
 
 use Illuminate\Auth\AuthManager;
 
-class TagsController extends Controller {
+class UsersController extends Controller {
 
-	protected $tag;
+	protected $user;
     
-    public function __construct(Tag $tag)
+    public function __construct(User $user)
     {
-        $this->tag = $tag;
+        $this->user = $user;
     }
     
     /**
@@ -25,12 +25,12 @@ class TagsController extends Controller {
 	 */
 	public function index()
 	{
-		$tags = $this->tag
+		$users = $this->user
             ->with('questions') // so we can use total_questions
-            ->orderBy('name') // alphabetical order
-            ->paginate(3);
+            ->with('answers') // so we can use total_questions
+            ->get();
         
-        return view('admin.tags.index', compact('tags'));
+        return view('admin.users.index', compact('users'));
 	}
 
 	/**
@@ -40,10 +40,7 @@ class TagsController extends Controller {
 	 */
 	public function create()
 	{
-		// we need an empty tag for the form
-        $tag = new Tag;
-        
-        return view('admin.tags.create', compact('tag'));
+		
 	}
 
 	/**
@@ -51,13 +48,9 @@ class TagsController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(TagRequest $request)
+	public function store(UserRequest $request)
 	{
-		$this->tag->create( $request->all() );
 		
-		return redirect()->to('admin/tags')->with([
-            'flash_message' => 'A new tag has been created',
-        ]);
 	}
 
 	/**
@@ -69,9 +62,9 @@ class TagsController extends Controller {
 	public function edit($id)
 	{
 		// will throw an exception if not found
-        $tag = $this->tag->findOrFail($id);
+        $user = $this->user->findOrFail($id);
         
-        return view('admin.tags.edit', compact('tag'));
+        return view('admin.users.edit', compact('user'));
 	}
 
 	/**
@@ -80,16 +73,17 @@ class TagsController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update(TagRequest $request, $id)
+	public function update($id)
 	{
 		// will throw an exception if not found
-        $tag = $this->tag->findOrFail($id);
+        $user = $this->user->findOrFail($id);
         
         // update the question with the request params
-        $tag->update($request->all());
+        $user->update($request->all());
         
-        return redirect()->to('admin/tags')->with([
+        return redirect()->to('admin/users/' . $id)->with([
             'flash_message' => 'Question has been updated',
+            // 'flash_message_important' => true,
         ]);
 	}
 
@@ -101,13 +95,15 @@ class TagsController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		$tag = $this->tag->findOrFail($id);
+		$user = $this->user->findOrFail($id);
+        
+        var_dump($id); exit;
         
         // will throw an exception if not found
-        $tag->delete();
+        $user->delete();
         
-        return redirect()->to('admin/tags')->with([
-            'flash_message' => 'Tag has been deleted',
+        return redirect()->to('admin/users')->with([
+            'flash_message' => 'User has been deleted',
         ]);
 	}
 

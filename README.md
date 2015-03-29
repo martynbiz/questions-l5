@@ -1,3 +1,12 @@
+today:
+- reply to politics posts
+- phone pam
+- tax forms?
+
+
+
+
+
 Adv of laravel ( ͡° ͜ʖ ͡°)
 
 tinker tool
@@ -12,8 +21,8 @@ array_* functions
 easier to organise subfolder routes (e.g. admin/.. account/..)
 
 
-? build caching into models - http://laravel.com/docs/4.2/queries (caching queries - removed?)
-http://laravel.io/forum/03-28-2015-if-i-wanted-to-create-a-simple-library-class-api-client-in-laravel-5-where-would-i-put-it
+? admin/tags/delete bug
+? how to put $auth in Controller so all controllers can access it?
 
 
 THINGS/ WAYS TO TEST
@@ -23,60 +32,80 @@ THINGS/ WAYS TO TEST
 
 TODO
 
-Tags
-- build admin interface - create, edit, pagination
-- admin auth/ acl
-- display multi-select in edit
-- add tags when asking
+- caching - http://laravel.io/forum/03-29-2015-whats-the-best-test-friendly-method-to-use-cache-in-models
+- pagination - http://laravel.io/forum/03-29-2015-pagination-links-html-is-being-escaped-in-my-view
 
-Questions
-- more questions button
-*save question - update slug event
 
-!hide email from json
+votes controller?
 
+points - how to make http calls?
+
+how to mock auth?
+notification emails - email has been hidden though :/ -- email templates/ views?
+
+admin - users, tags, questions, answers, 
+- questions
+--- remove ask button
+--- remove edit/ delete
+--- make clickable to public area
+
+account - questions, answers, profile
 
 auth 
-- only show edit/ delete if authenticated and own the file (acl?)
+- landing page /admin
 - change registration page
 
 
+MIGRATE HTML, CSS, etc
+- assets - revise again
+- Theme?
+- bring in CSS, js
+
+
+Question
+- total_views?
+
+
+
+
+JS
+- more questions button
+- ckeditor - questions and answers
+- votes widget
+- infinate scrolling - laravel respond json; backbone, mustache templates
 
 composer package: -- look at providers too, i'm not sure what's different about them
 metroworks\laravel-tools
 - Metroworks\Laravel5\Middleware\SamlPassiveLogin
-- Metroworks\ApiClient\Reputation
-- Metroworks\ApiClient\Subjects
-- Metroworks\ApiClient\Reviews
+- Metroworks\Laravel5\Middleware\AuthenticateAdmin
+- Metroworks\Http\Reputation (points)
+- Metroworks\Http\Subjects
+- Metroworks\Http\Reviews
+- Metroworks\Http\Solr?
 
 
 
 test - models, controllers (uses requests?), requests?
-infinate scrolling - laravel respond json; backbone, mustache templates
-admin - users, tags, questions, answers, 
-account - questions, answers, profile
+
+
 docs
 sso - remove the auth library from laravel, move into composer - Metroworks\Auth\Registrar;
 .. or provider? which can i configure?
 solr
-redesign topnav - empty panels, loaded with ajax; clicking main buttons takes you somewhere; slide down
 
-Theme
-assets - revise again
-bring in CSS, js
 
-hometabs
-- load with ajax
+ENHANCEMENTS
+- redesign topnav - empty panels, loaded with ajax; clicking main buttons takes you somewhere; slide down
 
-tags
-- tag buttons on create/edit
-- 
 
-points
 
-load test - zend qa vs laravel
+
+
+load testing - zend qa vs laravel
 
 
 DOCS
 
 Everything get's returned to the view as an array. This is so that js can also fetch the same data without some complicated conversions (as front end templates cannot use 
+
+gulp and phpunit testing

@@ -2,9 +2,8 @@
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Http\RedirectResponse;
 
-class RedirectIfAuthenticated {
+class AuthenticateAdmin {
 
 	/**
 	 * The Guard implementation.
@@ -33,9 +32,15 @@ class RedirectIfAuthenticated {
 	 */
 	public function handle($request, Closure $next)
 	{
-		if ($this->auth->check())
+		// if not logged in, redirect them to login
+		if (!$this->auth->user()) {
+			return redirect()->guest('auth/login');
+		}
+		
+		// ..otherwise
+		if ($this->auth->user()->role != 'admin')
 		{
-			return new RedirectResponse(url('/'));
+			return response('Unauthorized.', 401);
 		}
 
 		return $next($request);

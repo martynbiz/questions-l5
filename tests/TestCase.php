@@ -2,7 +2,9 @@
 
 class TestCase extends Illuminate\Foundation\Testing\TestCase {
 
-	/**
+	protected $mocks = [];
+    
+    /**
 	 * Creates the application.
 	 *
 	 * @return \Illuminate\Foundation\Application

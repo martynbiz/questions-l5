@@ -26,9 +26,6 @@ class QuestionsController extends Controller {
     {
         // set our auth instance
         $this->user = $this->user;
-        
-        // apply auth middleware to authenticate all pages.
-        $this->middleware('auth');
     }
     
     /**

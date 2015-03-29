@@ -1,7 +1,7 @@
 @if($questions->count())
     @foreach($questions as $question)
         <div class="question">
-            <h2><a href="{{ url($question->id) }}">{{$question->title}}</a></h2>
+            <h2><a href="{{ url($question->id . '/' . $question->slug) }}">{{$question->title}}</a></h2>
             <div class="info">Asked by {{$question->user->name}} | {{$question->created_at_formatted}}</div>
             
             <div class="buttons">

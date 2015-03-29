@@ -9,11 +9,15 @@
     <div class="body">{{$question->content}}</div>
     
     <div>
-        {!! Form::open(array('route' => array('questions.destroy', $question->id), 'method' => 'delete', 'id' => 'questionDelete')) !!}
+        {!! Form::open(array('route' => array('questions.destroy', $question->id), 'method' => 'delete', 'id' => 'questionDelete_' . $question->id)) !!}
             <a href="{{route('questions.edit', [$question->id])}}">Edit</a> |
-            <a href="#" onclick="document.getElementById('questionDelete').submit(); return false;">Delete</a>
+            <a href="#" onclick="$('#questionDelete_{{$question->id}}').confirmSubmit('Are you sure you want to delete this question?'); return false;">Delete</a>
         {!! Form::close() !!}
     </div>
+    
+    @foreach($question->tags as $tag)
+        <a href="{{url('tags/' . $tag->id . '/' . $tag->slug)}}" class="badge">{{$tag->name}}</a>
+    @endforeach
     
     <hr>
     

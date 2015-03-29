@@ -11,6 +11,23 @@ class Question extends Model {
         'slug',
     ];
     
+    /**
+     * @var Cache object
+     */
+    // protected $cache;
+    
+    /**
+     * This let's us pass in the Cache object (so we can mock it)
+     * @param Cache $cache
+     */
+    // public function __construct($cache=null)  {
+    //     parent::__construct();
+        
+    //     // set the cache
+    //     $this->cache = $cache;
+    // }
+    
+    
     
     // relationships
     
@@ -57,7 +74,7 @@ class Question extends Model {
     /**
      * Fetch the newest questions
      */
-    public function scopeNewest($query)
+    public function scopeNewest($query, $options=array())
     {
         return $query->with('answers')
             ->with('tags')

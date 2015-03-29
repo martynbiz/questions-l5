@@ -1,17 +1,15 @@
 <?php namespace App\Http\Controllers;
 
-use Response;
-
-use App\Http\Requests\QuestionRequest;
 use App\Http\Controllers\Controller;
 
+// requests
+use App\Http\Requests\QuestionRequest;
+
+// models
 use App\Question;
 use App\Tag;
 
 use Illuminate\Auth\AuthManager;
-
-// use Auth;
-use Request;
 
 class QuestionsController extends Controller {
     
@@ -87,8 +85,11 @@ class QuestionsController extends Controller {
         // get the tags so that we can display tag list
         $tags = $tag->all();
         
+        // we need an empty question for the form
+        $question = new Question;
+        
         // render the view script, or json if ajax request
-        return $this->render('questions.create', compact('tags'));
+        return $this->render('questions.create', compact('question', 'tags'));
     }
     
     /**
@@ -109,20 +110,22 @@ class QuestionsController extends Controller {
         // redirect
         return redirect()->to('/')->with([
             'flash_message' => 'A new question has been created',
-            // 'flash_message_important' => true,
         ]);
     }
     
     /**
      * 
      */
-    public function edit(AuthManager $auth, $id)
+    public function edit(AuthManager $auth, Tag $tag, $id)
     {
         // will throw an exception if not found
         $question = $auth->user()->questions()->findOrFail($id);
         
+        // get the tags so that we can display tag list
+        $tags = $tag->all();
+        
         // render the view script, or json if ajax request
-        return $this->render('questions.edit', compact('question'));
+        return $this->render('questions.edit', compact('question', 'tags'));
     }
     
     /**
@@ -134,11 +137,16 @@ class QuestionsController extends Controller {
         $question = $auth->user()->questions()->findOrFail($id);
         
         // update the question with the request params
-        $question->update($request->all());
+        $question->update( $request->all() );
+        
+        // save tags
+        $question->tags()->detach();
+        foreach($request->input('tags') as $tagId) {
+            $question->tags()->attach($tagId);
+        }
         
         return redirect()->to($id)->with([
             'flash_message' => 'Question has been updated',
-            // 'flash_message_important' => true,
         ]);
     }
 
@@ -150,6 +158,13 @@ class QuestionsController extends Controller {
      */
     public function destroy($id)
     {
-        //
+        $question = $this->question->findOrFail($id);
+        
+        // will throw an exception if not found
+        $question->delete();
+        
+        return redirect()->to('/')->with([
+            'flash_message' => 'Question has been deleted',
+        ]);
     }
 }

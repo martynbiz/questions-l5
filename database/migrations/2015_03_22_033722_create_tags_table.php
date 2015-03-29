@@ -22,6 +22,7 @@ class CreateTagsTable extends Migration {
 			$table->string('slug');
 			
 			$table->timestamps();
+			$table->softDeletes();
 		});
 		
 		Schema::create('question_tag', function(Blueprint $table)

@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 class QuestionsControllerTest extends TestCase {
 
-    protected $mocks = [];
-    
     public function setUp()
     {
         parent::setUp();

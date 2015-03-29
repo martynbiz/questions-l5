@@ -7,22 +7,33 @@
         <li class="active">Tags</li>
     </ol>
     
-    <div class="well">
-        <a href="{{url('admin/tags/create')}}" class="btn btn-primary">Create tag</a>&nbsp;&nbsp;
-        <a href="#" class="btn btn-default">Import</a>&nbsp;&nbsp;
-        <a href="#" class="btn btn-default">Export</a>
-    </div>
-    
     <table class="table table-striped">
         <tr>
             <th>Name</th>
             <th># of Questions</th>
+            <th></th>
         </tr>
         @foreach($tags as $tag)
             <tr>
                 <td>{{$tag->name}}</td>
-                <td width="20%">...</td>
+                <td width="20%">{{$tag->total_questions}}</td>
+                <td width="20%">
+                    {!! Form::open(array('route' => array('admin.tags.destroy', $tag->id), 'method' => 'delete', 'id' => 'tagDelete_' . $tag->id)) !!}
+                        @if (Auth::user()->canUpdate($tag))
+                            <a href="{{route('admin.tags.edit', [$tag->id])}}">Edit</a>
+                        @endif |
+                        @if (Auth::user()->canDelete($tag))
+                            <a onclick="$('#tagDelete_{{$tag->id}}').confirmSubmit('Are you sure you want to delete this tag?'); return false;" href="{{route('admin.tags.destroy', [$tag->id])}}">Delete</a>
+                        @endif
+                    {!! Form::close() !!}
+                </td>
             </tr>
         @endforeach
     </table>
+    
+    <?php echo $tags->render(); ?>
+    
+    <div>
+        <a href="{{route('admin.tags.create')}}" class="btn btn-primary">Create tag</a>
+    </div>
 @stop

@@ -1,9 +1,12 @@
 <?php namespace App;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
 
 class Model extends Eloquent {
+
+    use SoftDeletes;
     
     /**
      * This just stops pivot appearing in the result

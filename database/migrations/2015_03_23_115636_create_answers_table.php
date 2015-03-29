@@ -27,6 +27,7 @@ class CreateAnswersTable extends Migration {
 				->index();
 			
 			$table->timestamps();
+			$table->softDeletes();
 			
 			// foreign keys
 			

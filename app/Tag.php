@@ -11,6 +11,8 @@ class Tag extends Model {
     ];
     
     
+    // relationships
+    
     /**
     * Get the questions associated with this tag
     * @return \Illuminte\Database\Eloquent\Relations\BelongsToMany
@@ -18,5 +20,17 @@ class Tag extends Model {
     public function questions()
     {
         return $this->belongsToMany('App\Question');
+    }
+    
+    
+    // attributes
+    
+    /**
+     * Fetch the total number of questions for this tag
+     * @return integer
+     */
+    protected function getTotalQuestionsAttribute()
+    {
+        return $this->questions->count();
     }
 }
