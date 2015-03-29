@@ -30,8 +30,7 @@ class CreateQuestionsTable extends Migration {
 			// question_id foreign key relationship 
 			$table->foreign('user_id')
 				->references('id')
-				->on('users')
-				->onDelete('set null');
+				->on('users');
 		});
 	}
 
