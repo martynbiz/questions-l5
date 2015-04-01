@@ -22,8 +22,18 @@ easier to organise subfolder routes (e.g. admin/.. account/..)
 great mailer
 
 
+<<<<<<< HEAD
 ? admin/tags/delete bug
 ? how to put $auth in Controller so all controllers can access it?
+=======
+..migrating
+
+can still use ZF1 as a dependancy, as components (e.g. Zend_Locale)
+
+
+? build caching into models - http://laravel.com/docs/4.2/queries (caching queries - removed?)
+http://laravel.io/forum/03-28-2015-if-i-wanted-to-create-a-simple-library-class-api-client-in-laravel-5-where-would-i-put-it
+>>>>>>> 4a253128cd255c5d9afb5e8cb7ef74b8191e594d
 
 
 THINGS/ WAYS TO TEST
