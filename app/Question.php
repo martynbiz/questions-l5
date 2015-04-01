@@ -109,5 +109,39 @@ class Question extends Model {
             ->latest()
             ->get();
     }
+    
+    /**
+     * Fetch the unanswered questions
+     */
+    public function scopeFollowing($query)
+    {
+        return $query->with('answers')
+            ->with('tags')
+            ->with('user')
+            ->with('follows')
+            ->latest()
+            ->get();
+    }
+    
+    
+    // attributes
+    
+    /**
+     * Return the total number of follows
+     * @return integer
+     */
+    protected function getTotalFollowsAttribute()
+    {
+        return count($this->follows);
+    }
+    
+    /**
+     * Return the total number of answers
+     * @return integer
+     */
+    protected function getTotalAnswersAttribute()
+    {
+        return count($this->answers);
+    }
 
 }

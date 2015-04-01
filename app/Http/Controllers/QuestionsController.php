@@ -1,7 +1,5 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-
 // requests
 use App\Http\Requests\QuestionRequest;
 
@@ -10,6 +8,10 @@ use App\Question;
 use App\Tag;
 
 use Illuminate\Auth\AuthManager;
+
+use App\Services\Points;
+
+use Cache;
 
 class QuestionsController extends Controller {
     
@@ -28,15 +30,18 @@ class QuestionsController extends Controller {
         $this->middleware('auth', ['only' => ['create', 'store', 'edit', 'update']]);
     }
     
+    
+    // hometabs
+    
     /**
      * Display page of newest questions
      */
     public function index() // newest
     {
-        $questions = $this->question->newest();
+        list($newest, $popular, $unanswered, $following) = $this->getHomeData();
         
         // render the view script, or json if ajax request
-        return $this->render('questions.index', compact('questions'));
+        return $this->render('questions.index', compact('newest', 'popular', 'unanswered', 'following'));
     }
     
     /**
@@ -44,10 +49,10 @@ class QuestionsController extends Controller {
      */
     public function popular()
     {
-        $questions = $this->question->popular();
+        list($newest, $popular, $unanswered, $following) = $this->getHomeData();
         
         // render the view script, or json if ajax request
-        return $this->render('questions.index', compact('questions'));
+        return $this->render('questions.popular', compact('newest', 'popular', 'unanswered', 'following'));
     }
     
     /**
@@ -55,11 +60,25 @@ class QuestionsController extends Controller {
      */
     public function unanswered()
     {
-        $questions = $this->question->unanswered();
+        list($newest, $popular, $unanswered, $following) = $this->getHomeData();
         
         // render the view script, or json if ajax request
-        return $this->render('questions.index', compact('questions'));
+        return $this->render('questions.unanswered', compact('newest', 'popular', 'unanswered', 'following'));
     }
+    
+    /**
+     * Display page of following questions
+     */
+    public function following()
+    {
+        list($newest, $popular, $unanswered, $following) = $this->getHomeData();
+        
+        // render the view script, or json if ajax request
+        return $this->render('questions.following', compact('newest', 'popular', 'unanswered', 'following'));
+    }
+    
+    
+    // 
     
     /**
      * 
@@ -95,17 +114,24 @@ class QuestionsController extends Controller {
     /**
      * 
      */
-    public function store(AuthManager $auth, QuestionRequest $request)
+    public function store(AuthManager $auth, QuestionRequest $request, Points $points)
     {
         // save question
         $question = $auth->user()->questions()->create( $request->all() );
         
         // save tags
-        foreach($request->input('tags') as $tagId) {
-            $question->tags()->attach($tagId);
+        if ($request->input('tags')) {
+            foreach($request->input('tags') as $tagId) {
+                $question->tags()->attach($tagId);
+            }
         }
-        
-        // *award points
+        // award points
+        $points->send([
+            'login' => $auth->user()->username,
+            'site_action' => 'ask',
+            'target_type' => 'question',
+            'question_id' => $question->id,
+        ]);
         
         // redirect
         return redirect()->to('/')->with([
@@ -166,5 +192,41 @@ class QuestionsController extends Controller {
         return redirect()->to('/')->with([
             'flash_message' => 'Question has been deleted',
         ]);
+    }
+    
+    
+    // private / protected methods
+    
+    protected function getHomeData()
+    {
+        // set option to use cache
+        $options = array('useCache' => true);
+        $question = $this->question;
+        $minutes = 5; // minutes to cache
+        
+        // use cache to store/ retreive
+        $newest = Cache::remember('questions_newest', $minutes, function() use ($question, $options) {
+            return $question->newest($options);
+        });
+        
+        $popular = Cache::remember('questions_popular', $minutes, function() use ($question, $options) {
+            return $question->popular($options);
+        });
+        
+        $unanswered = Cache::remember('questions_unanswered', $minutes, function() use ($question, $options) {
+            return $question->unanswered($options);
+        });
+        
+        $following = Cache::remember('questions_following', $minutes, function() use ($question, $options) {
+            return $question->following($options);
+        });
+        
+        // return collections of questions
+        return array(
+            $newest,
+            $popular,
+            $unanswered,
+            $following,
+        );
     }
 }

@@ -26,7 +26,19 @@ return [
 	|
 	*/
 
-	'url' => 'http://localhost:8000',
+	'url' => 'http://localhost:8000', //env('APP_URL'),
+
+	/*
+	|--------------------------------------------------------------------------
+	| Email name/ address for notifcations
+	|--------------------------------------------------------------------------
+	|
+	| ...
+	|
+	*/
+
+	'admin_name' => 'JapanTravel',
+	'admin_email' => 'noreply@japantravel.com',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -197,6 +209,7 @@ return [
 		'Form'      => 'Illuminate\Html\FormFacade',
 		'Html'      => 'Illuminate\Html\HtmlFacade',
 		'Str'       => 'Illuminate\Support\Str',
+		'Mailer'    => 'Illuminate\Support\Mail',
 
 	],
 

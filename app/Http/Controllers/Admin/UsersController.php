@@ -25,13 +25,25 @@ class UsersController extends Controller {
 	 */
 	public function index()
 	{
-		$users = $this->user
-            ->with('questions') // so we can use total_questions
-            ->with('answers') // so we can use total_questions
-            ->get();
+		$users = $this->user->paginate(15);
         
         return view('admin.users.index', compact('users'));
 	}
+    
+    /**
+     * 
+     */
+    public function show($id)
+    {
+        // will throw an exception if not found
+        $user = $this->user
+            ->with('questions')
+            ->with('answers')
+            ->findOrFail($id);
+        
+        // render the view script, or json if ajax request
+        return $this->render('admin.users.show', compact('user'));
+    }
 
 	/**
 	 * Show the form for creating a new resource.
@@ -61,10 +73,7 @@ class UsersController extends Controller {
 	 */
 	public function edit($id)
 	{
-		// will throw an exception if not found
-        $user = $this->user->findOrFail($id);
-        
-        return view('admin.users.edit', compact('user'));
+		
 	}
 
 	/**
@@ -75,16 +84,7 @@ class UsersController extends Controller {
 	 */
 	public function update($id)
 	{
-		// will throw an exception if not found
-        $user = $this->user->findOrFail($id);
-        
-        // update the question with the request params
-        $user->update($request->all());
-        
-        return redirect()->to('admin/users/' . $id)->with([
-            'flash_message' => 'Question has been updated',
-            // 'flash_message_important' => true,
-        ]);
+		
 	}
 
 	/**

@@ -31,7 +31,7 @@
         @endforeach
     </table>
     
-    <?php echo $tags->render(); ?>
+    {!! $tags->render() !!}
     
     <div>
         <a href="{{route('admin.tags.create')}}" class="btn btn-primary">Create tag</a>

@@ -6,6 +6,6 @@
         'popular' => $popular,
         'unanswered' => $unanswered,
         'following' => $following,
-        'active' => 'Newest',
+        'active' => 'Following',
     ])
 @stop

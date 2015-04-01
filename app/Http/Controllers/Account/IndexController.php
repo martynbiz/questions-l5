@@ -1,4 +1,4 @@
-<?php namespace App\Http\Controllers\Admin;
+<?php namespace App\Http\Controllers\Account;
 
 use App\Http\Controllers\Controller;
 
@@ -9,6 +9,6 @@ class IndexController extends Controller {
      */
     public function index()
     {
-        return view('admin.index.index', compact('questions'));
+        return $this->render('account.index.index', compact('questions'));
     }
 }

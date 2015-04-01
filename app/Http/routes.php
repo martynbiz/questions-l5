@@ -17,6 +17,7 @@
 Route::get('/', 'QuestionsController@index');
 Route::get('popular', 'QuestionsController@popular');
 Route::get('unanswered', 'QuestionsController@unanswered');
+Route::get('following', 'QuestionsController@following');
 Route::get('/{id}/{slug?}', 'QuestionsController@show')->where('id', '[0-9]+');
 Route::get('/ask', 'QuestionsController@create');
 
@@ -47,9 +48,25 @@ Route::controllers([
 // admin/...
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin'], function() {
+    
+    // admin/
     Route::resource('/', 'Admin\IndexController');
+    
+    // admin/questions
+    Route::get('questions/approve', [
+        'uses' => 'Admin\QuestionsController@approve',
+        'as' => 'admin.questions.approve',
+    ]);
     Route::resource('questions', 'Admin\QuestionsController');
+    
+    // admin/tags
     Route::resource('tags', 'Admin\TagsController');
+    
+    // admin/users
+    Route::resource('users', 'Admin\UsersController');
+    
+    // admin/answers
+    Route::resource('answers', 'Admin\AnswersController');
 });
 
 
@@ -58,4 +75,5 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin'], function() {
 Route::group(['prefix' => 'account', 'middleware' => 'auth'], function() {
     Route::resource('/', 'Account\IndexController');
     Route::resource('questions', 'Account\QuestionsController');
+    // Route::resource('answers', 'Account\AnswersController');
 });

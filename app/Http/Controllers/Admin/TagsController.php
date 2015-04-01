@@ -28,7 +28,7 @@ class TagsController extends Controller {
 		$tags = $this->tag
             ->with('questions') // so we can use total_questions
             ->orderBy('name') // alphabetical order
-            ->paginate(3);
+            ->paginate(15);
         
         return view('admin.tags.index', compact('tags'));
 	}

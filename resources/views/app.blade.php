@@ -47,7 +47,7 @@
 								@if (Auth::user()->isAdmin())
 									<li><a href="{{url('admin')}}">Admin</a></li>
 								@endif
-								
+								<li><a href="{{url('account')}}">Account</a></li>
 								<li><a href="{{url('auth/logout')}}">Logout</a></li>
 							</ul>
 						</li>

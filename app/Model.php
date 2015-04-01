@@ -19,7 +19,7 @@ class Model extends Eloquent {
      * Return a human readable created_at datetime
      * @return string
      */
-    protected function getCreatedAtFormattedAttribute()
+    protected function getDateCreatedAttribute()
     {
         return Carbon::parse($this->created_at)->diffForHumans();
     }
@@ -28,7 +28,7 @@ class Model extends Eloquent {
      * Return a human readable updated_at datetime
      * @return string
      */
-    protected function getUpdatedAtFormattedAttribute()
+    protected function getDateUpdatedAttribute()
     {
         return Carbon::parse($this->updated_at)->diffForHumans();
     }
@@ -37,7 +37,7 @@ class Model extends Eloquent {
      * Return a human readable deleted_at datetime
      * @return string
      */
-    protected function getDeletedAtFormattedAttribute()
+    protected function getDateDeletedAttribute()
     {
         return Carbon::parse($this->deleted_at)->diffForHumans();
     }

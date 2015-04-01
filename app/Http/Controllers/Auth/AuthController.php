@@ -6,6 +6,8 @@ use Illuminate\Contracts\Auth\Registrar;
 
 use Illuminate\Http\Request;
 
+use App\Services\Notify;
+
 // EDIT: I've imported these functions in for clarity, and I want to change them for SSO
 // use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
@@ -75,18 +77,27 @@ class AuthController extends Controller {
 	 * @param  \Illuminate\Foundation\Http\FormRequest  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function postRegister(Request $request)
+	public function postRegister(Request $request, Notify $notify)
 	{
+		// validate the new user
 		$validator = $this->registrar->validator($request->all());
-
+		
+		// throw exception if validation fails
 		if ($validator->fails())
 		{
 			$this->throwValidationException(
 				$request, $validator
 			);
 		}
-
-		$this->auth->login($this->registrar->create($request->all()));
+		
+		// create the new user
+		$user = $this->registrar->create( $request->all() );
+		
+		// send notification email
+        $notify->toNewUserReNewRegistration($user);
+		
+		// log the user in
+		$this->auth->login($user);
 
 		return redirect($this->redirectPath());
 	}

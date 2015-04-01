@@ -1,12 +1,13 @@
 <?php namespace App\Http\Controllers;
 
 use App\Http\Requests\AnswerRequest;
-use App\Http\Controllers\Controller;
 
 use App\Question;
 use App\Answer;
 
 use Illuminate\Auth\AuthManager;
+
+use App\Services\Notify;
 
 class AnswersController extends Controller {
 
@@ -49,20 +50,22 @@ class AnswersController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(AuthManager $auth, AnswerRequest $request, Question $question)
+	public function store(AuthManager $auth, AnswerRequest $request, Question $question, Notify $notify)
 	{
-		$user = $auth->user();
-		
-		// *has this user already answered this question?
+		// Check if this user has answered the question already
 		$question = $question->find( $request->get('question_id') );
-		if ($user->hasAnswered($question)) {
+		if ($auth->user()->hasAnswered($question)) {
 			return redirect()->to($question->id)->with([
 	            'flash_message' => 'You have already given an answer for this question',
 	        ]);
 		}
 		
 		// create answer
-		$answer = $user->answers()->create( $request->all() );
+		$answer = $auth->user()->answers()->create( $request->all() );
+        
+        // send notification emails
+        $notify->toQuestionOwnerReNewAnswer($answer);
+        $notify->toQuestionFollowersReNewAnswer($answer);
 		
 		// 
 		return redirect()->to($answer->question_id)->with([
