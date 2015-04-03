@@ -97,8 +97,6 @@ class UsersController extends Controller {
 	{
 		$user = $this->user->findOrFail($id);
         
-        var_dump($id); exit;
-        
         // will throw an exception if not found
         $user->delete();
         

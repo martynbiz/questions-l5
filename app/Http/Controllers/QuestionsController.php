@@ -38,10 +38,10 @@ class QuestionsController extends Controller {
      */
     public function index() // newest
     {
-        list($newest, $popular, $unanswered, $following) = $this->getHomeData();
+        list($newest, $popular, $unanswered) = $this->getHomeQuestions();
         
         // render the view script, or json if ajax request
-        return $this->render('questions.index', compact('newest', 'popular', 'unanswered', 'following'));
+        return $this->render('questions.index', compact('newest', 'popular', 'unanswered'));
     }
     
     /**
@@ -49,10 +49,10 @@ class QuestionsController extends Controller {
      */
     public function popular()
     {
-        list($newest, $popular, $unanswered, $following) = $this->getHomeData();
+        list($newest, $popular, $unanswered) = $this->getHomeQuestions();
         
         // render the view script, or json if ajax request
-        return $this->render('questions.popular', compact('newest', 'popular', 'unanswered', 'following'));
+        return $this->render('questions.popular', compact('newest', 'popular', 'unanswered'));
     }
     
     /**
@@ -60,10 +60,10 @@ class QuestionsController extends Controller {
      */
     public function unanswered()
     {
-        list($newest, $popular, $unanswered, $following) = $this->getHomeData();
+        list($newest, $popular, $unanswered) = $this->getHomeQuestions();
         
         // render the view script, or json if ajax request
-        return $this->render('questions.unanswered', compact('newest', 'popular', 'unanswered', 'following'));
+        return $this->render('questions.unanswered', compact('newest', 'popular', 'unanswered'));
     }
     
     /**
@@ -71,10 +71,10 @@ class QuestionsController extends Controller {
      */
     public function following()
     {
-        list($newest, $popular, $unanswered, $following) = $this->getHomeData();
+        list($newest, $popular, $unanswered) = $this->getHomeQuestions();
         
         // render the view script, or json if ajax request
-        return $this->render('questions.following', compact('newest', 'popular', 'unanswered', 'following'));
+        return $this->render('questions.following', compact('newest', 'popular', 'unanswered'));
     }
     
     
@@ -197,7 +197,7 @@ class QuestionsController extends Controller {
     
     // private / protected methods
     
-    protected function getHomeData()
+    protected function getHomeQuestions()
     {
         // set option to use cache
         $options = array('useCache' => true);
@@ -217,16 +217,11 @@ class QuestionsController extends Controller {
             return $question->unanswered($options);
         });
         
-        $following = Cache::remember('questions_following', $minutes, function() use ($question, $options) {
-            return $question->following($options);
-        });
-        
         // return collections of questions
         return array(
             $newest,
             $popular,
             $unanswered,
-            $following,
         );
     }
 }

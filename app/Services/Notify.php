@@ -1,6 +1,7 @@
 <?php namespace App\Services;
 
 use Mail;
+use Config;
 
 use App\User;
 use App\Question;

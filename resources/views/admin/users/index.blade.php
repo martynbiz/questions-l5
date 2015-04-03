@@ -20,10 +20,7 @@
                 <td>{{$user->name}}</td>
                 <td>{{$user->email}}</td>
                 <td>
-                    {!! Form::open(array('route' => array('admin.users.destroy', $user->id), 'method' => 'delete', 'id' => 'userDelete_' . $user->id)) !!}
-                        <a href="{{route('admin.users.show', [$user->id])}}">Show</a> |
-                        <a onclick="$('#userDelete_{{$user->id}}').confirmSubmit('Are you sure you want to delete this user?'); return false;" href="{{route('admin.users.destroy', [$user->id])}}">Delete</a>
-                    {!! Form::close() !!}
+                    <a href="{{route('admin.users.show', [$user->id])}}">Show</a>
                 </td>
             </tr>
         @endforeach

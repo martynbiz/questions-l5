@@ -1,7 +1,5 @@
 <?php namespace App\Services;
 
-// require_once 'Text/Password.php';
-
 use GuzzleHttp\Client;
 
 class Points
@@ -124,7 +122,7 @@ class Points
         // "Rijndael can sync up on each block so only the first one (here, 256 bits
         // = 32 characters long) will be corrupted."
         // When decrypting, we will ignore the first 32 characters.
-        $generator = new QA_TextPassword();
+        $generator = new Text_Password();
         $prefix32 = $generator->create(32, 'unpronounceable', 'alphabetical');
 
         return mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, $prefix32 . $message, MCRYPT_MODE_CFB, $iv);

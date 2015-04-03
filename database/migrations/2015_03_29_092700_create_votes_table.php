@@ -23,12 +23,9 @@ class CreateVotesTable extends Migration {
 				->index();
 			
 			// voteable_id -- question_id, answer_id, etc
-			$table->integer('voteable_id')
+			$table->integer('answer_id')
 				->unsigned()
 				->index();
-			
-			// voteable_type -- "question", "answer", etc
-			$table->string('voteable_type');
 			
 			// value -- value of the vote (e.g. 1, -1)
 			$table->integer('value');
@@ -45,6 +42,11 @@ class CreateVotesTable extends Migration {
 			$table->foreign('user_id')
 				->references('id')
 				->on('users');
+			
+			$table->foreign('answer_id')
+				->references('id')
+				->on('answers')
+				->onDelete('cascade');
 		});
 	}
 

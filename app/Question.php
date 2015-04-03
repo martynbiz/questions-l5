@@ -1,5 +1,7 @@
 <?php namespace App;
 
+use Cache;
+
 class Question extends Model {
     
     /**
@@ -9,24 +11,8 @@ class Question extends Model {
         'title',
         'content',
         'slug',
+        'is_approved',
     ];
-    
-    /**
-     * @var Cache object
-     */
-    // protected $cache;
-    
-    /**
-     * This let's us pass in the Cache object (so we can mock it)
-     * @param Cache $cache
-     */
-    // public function __construct($cache=null)  {
-    //     parent::__construct();
-        
-    //     // set the cache
-    //     $this->cache = $cache;
-    // }
-    
     
     
     // relationships
@@ -142,6 +128,21 @@ class Question extends Model {
     protected function getTotalAnswersAttribute()
     {
         return count($this->answers);
+    }
+    
+    
+    // custom functions
+    
+    /**
+     * Clear the cache. This should contain all general items (e.g. newest)
+     * This will be set in EventServiceProvider to clear cache on every save
+     * and delete
+     */
+    protected function emptyCache()
+    {
+        Cache::forget('questions_newest');
+        Cache::forget('questions_popular');
+        Cache::forget('questions_unanswered');
     }
 
 }

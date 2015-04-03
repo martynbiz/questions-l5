@@ -1,11 +1,13 @@
 <?php namespace App\Http\Controllers\Admin;
 
+// requests
+use Illuminate\Http\Request;
+
 use App\Http\Controllers\Controller;
 
 use App\Question;
 
 use Auth;
-use Request;
 
 class QuestionsController extends Controller {
     
@@ -29,11 +31,12 @@ class QuestionsController extends Controller {
             ->paginate(5);
         
         // get unapproved questions - *mocked
-        $total_unapproved = $this->question
+        $total_pending = $this->question
+            ->where('is_approved', '<>', 1) // not approved
             ->take(1) // 1 is enough to display the tab -- why 11????
             ->count();
         
-        return view('admin.questions.index', compact('questions', 'total_unapproved'));
+        return view('admin.questions.index', compact('questions', 'total_pending'));
     }
     
     /**
@@ -46,10 +49,29 @@ class QuestionsController extends Controller {
             ->with('answers')
             ->with('follows')
             ->with('user')
+            ->where('is_approved', '<>', 1) // not approved
             ->oldest() // approved oldest first
-            ->take(5) // allows 5 to display at once (and approve all 5)
-            ->get();
+            ->paginate(5);
         
-        return view('admin.questions.approve', compact('questions'));
+        $total_pending = count($questions);
+        
+        return view('admin.questions.approve', compact('questions', 'total_pending'));
+    }
+    
+    /**
+     * Approved action handle
+     */
+    public function update(Request $request, $id)
+    {
+        // will throw an exception if not found
+        $question = $this->question->findOrFail($id);
+        
+        // update the question with the request params
+        $question->update( $request->all() );
+        
+        // we only edit is_approved, so redirect back to there
+        return redirect()->to('admin/questions/pending')->with([
+            'flash_message' => 'Question has been approved',
+        ]);
     }
 }

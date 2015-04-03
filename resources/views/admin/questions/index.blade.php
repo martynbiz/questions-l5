@@ -7,12 +7,7 @@
         <li class="active">Questions</li>
     </ol>
     
-    <ul class="nav nav-tabs">
-        <li role="presentation" class="active"><a href="{{route('admin.questions.index')}}">List</a></li>
-        @if ($total_unapproved > 0)
-            <li role="presentation"><a href="{{route('admin.questions.approve')}}">Approve</a></li>
-        @endif
-    </ul>
+    @include ('admin.questions.partials.tabs', ['page' => 'List', 'total_pending' => $total_pending])
     
     <table class="table table-striped">
         <tr>

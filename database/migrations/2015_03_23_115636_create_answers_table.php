@@ -25,6 +25,8 @@ class CreateAnswersTable extends Migration {
 			$table->integer('user_id')
 				->unsigned()
 				->index();
+			$table->integer('is_approved')
+				->unsigned();
 			
 			$table->timestamps();
 			$table->softDeletes();

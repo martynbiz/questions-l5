@@ -9,37 +9,54 @@ today:
 
 Adv of laravel ( ͡° ͜ʖ ͡°)
 
+auth & csrf out-the-box
+generator tool
 tinker tool
 dd()
-gulp for styles, js
-much cleaner
 array_* functions
+testing
 
 
 ..adv for QA?
 
 easier to organise subfolder routes (e.g. admin/.. account/..)
 great mailer
+much MUCH better asset management (gulp)
+much cleaner, less code - less dev time
 
 
-<<<<<<< HEAD
+
+
+
+
 ? admin/tags/delete bug
 ? how to put $auth in Controller so all controllers can access it?
-=======
-..migrating
 
+..migrating
 can still use ZF1 as a dependancy, as components (e.g. Zend_Locale)
 
 
 ? build caching into models - http://laravel.com/docs/4.2/queries (caching queries - removed?)
 http://laravel.io/forum/03-28-2015-if-i-wanted-to-create-a-simple-library-class-api-client-in-laravel-5-where-would-i-put-it
->>>>>>> 4a253128cd255c5d9afb5e8cb7ef74b8191e594d
+? languages -- any tools?
+
 
 
 THINGS/ WAYS TO TEST
 - controllers: routes are ok
 - models: relationships, custom methods
 - Metroworks\Http\Reputation (points)
+
+
+
+
+
+
+
+
+
+
+
 
 TODO
 
@@ -49,16 +66,8 @@ TODO
 - "guzzlehttp/guzzle": "5.0.*@dev",
 
 
-points 
-- bring in Text/Password.php with composer?
 
 
-
-admin - users, tags, questions, answers, -- just complete all these
-- questions
---- remove ask button
---- remove edit/ delete
---- make clickable to public area
 account - questions, answers, profile
 
 
@@ -72,6 +81,7 @@ MIGRATE HTML, CSS, etc
 - assets - revise again
 - Theme - teepluss/laravel-theme
 - bring in CSS, js
+- admin: second layout, console style
 
 
 Question
@@ -96,6 +106,7 @@ JS
 - votes widget
 - infinate scrolling - laravel respond json; backbone, mustache templates
 - votes widget/ controller?
+- http://ifightcrime.github.io/bootstrap-growl/
 
 composer package: -- look at providers too, i'm not sure what's different about them
 metroworks\laravel-tools
@@ -125,6 +136,18 @@ ENHANCEMENTS
 
 
 
+
+
+TIDY UPs
+
+bring in Text/Password.php with composer? -- do we need it??
+
+
+
+
+
+
+
 load testing - zend qa vs laravel
 
 
@@ -133,3 +156,7 @@ DOCS
 Everything get's returned to the view as an array. This is so that js can also fetch the same data without some complicated conversions (as front end templates cannot use 
 
 gulp and phpunit testing
+
+every model has date_* attributes (e.g. date_created)
+
+don't delete users as we don't remove questions. to revoke their access, either disable or delete on sso

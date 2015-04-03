@@ -9,6 +9,8 @@ use Illuminate\Auth\AuthManager;
 
 use App\Services\Notify;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 class AnswersController extends Controller {
 
 	protected $answer;
@@ -126,16 +128,21 @@ class AnswersController extends Controller {
 	 */
 	public function destroy(AuthManager $auth, $id)
 	{
-		$answer = $auth->user()->answers()->findOrFail($id);
-		
+		// will throw an exception if not found
+        $answer = $this->answer->findOrFail($id);
+        
+        // can this user delete this answer (may be an admin user?)
+        if (! $auth->user()->canDelete($answer))
+            throw new ModelNotFoundException('You do not have permission to delete this answer');
+        
 		// capture the questionId before we delete
 		$questionId = $answer->question_id;
 		
-		// will throw an exception if not found
+		// delete the answer
         $answer->delete();
         
         return redirect()->to($questionId)->with([
-            'flash_message' => 'Question has been deleted',
+            'flash_message' => 'Answer has been deleted',
         ]);
 	}
 

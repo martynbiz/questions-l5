@@ -6,12 +6,18 @@
         <li class="active">{{$question->title}}</li>
     </ol>
     
+    <div class="info">Asked by {{$question->user->name}} | {{$question->date_created}}</div>
+    
     <div class="body">{{$question->content}}</div>
     
     <div>
         {!! Form::open(array('route' => array('questions.destroy', $question->id), 'method' => 'delete', 'id' => 'questionDelete_' . $question->id)) !!}
-            <a href="{{route('questions.edit', [$question->id])}}">Edit</a> |
-            <a href="#" onclick="$('#questionDelete_{{$question->id}}').confirmSubmit('Are you sure you want to delete this question?'); return false;">Delete</a>
+            @if (Auth::user()->canUpdate($question))
+                <a href="{{route('questions.edit', [$question->id])}}">Edit</a>
+            @endif
+            @if (Auth::user()->canDelete($question))
+                <a href="#" onclick="$('#questionDelete_{{$question->id}}').confirmSubmit('Are you sure you want to delete this question?'); return false;">Delete</a>
+            @endif
         {!! Form::close() !!}
     </div>
     
@@ -25,17 +31,17 @@
     
     @foreach($question->answers as $answer)
         <div class="answer">
-            <div class="info">Answered by {{$answer->user->name}} | {{$answer->created_at_formatted}}</div>
+            <div class="info">Answered by {{$answer->user->name}} | {{$answer->date_created}}</div>
             <div>{{{$answer->content}}}</div>
             
             @if (Auth::user() and (Auth::user()->canUpdate($answer) or Auth::user()->canDelete($answer)))
                 <div>
-                    {!! Form::open(array('route' => array('answers.destroy', $answer->id), 'method' => 'delete', 'id' => 'answerDelete')) !!}
+                    {!! Form::open(array('route' => array('answers.destroy', $answer->id), 'method' => 'delete', 'id' => 'answerDelete_' . $answer->id)) !!}
                         @if (Auth::user()->canUpdate($answer))
                             <a href="{{route('answers.edit', [$answer->id])}}">Edit</a>
                         @endif |
                         @if (Auth::user()->canDelete($answer))
-                            <a href="#" onclick="document.getElementById('answerDelete').submit(); return false;">Delete</a>
+                            <a href="#" onclick="$('#answerDelete_{{$answer->id}}').confirmSubmit('Are you sure you want to delete this answer?'); return false;">Delete</a>
                         @endif
                     {!! Form::close() !!}
                 </div>

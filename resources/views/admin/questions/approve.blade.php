@@ -7,22 +7,29 @@
         <li class="active">Questions</li>
     </ol>
     
-    <ul class="nav nav-tabs">
-        <li role="presentation"><a href="{{route('admin.questions.index')}}">List</a></li>
-        <li role="presentation" class="active"><a href="{{route('admin.questions.approve')}}">Approve</a></li>
-    </ul>
+    @include ('admin.questions.partials.tabs', ['page' => 'Approve', 'total_pending' => $total_pending])
     
     @foreach($questions as $question)
-        <div class="well">
-            <p class="title">{{$question->title}}</p>
-            <div class="content">
-                {{$question->content}}
+        {!! Form::model($question, ['action' => ['Admin\QuestionsController@update', $question->id], 'method' => 'PATCH']) !!}
+            <div class="well">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <p class="title">{{$question->title}}</p>
+                        <div class="content">
+                            {{$question->content}}
+                        </div>
+                        <p class="stats">Asked by {{$question->user->name}} | {{$question->date_created}}</p>
+                    </div>
+                    
+                    {!! Form::hidden('is_approved', 1) !!}
+                    
+                    <div class="col-sm-2 text-right">
+                        {!! Form::submit('Approve', ['class'=>'btn btn-default']) !!}
+                    </div>
+                </div>
             </div>
-            <p class="stats">Asked by {{$question->user->name}} | {{$question->date_created}}</p>
-            
-            <a href="#" class="btn btn-default">Approve</a>
-        </div>
+        {!! Form::close() !!}
     @endforeach
     
-    <a href="#" class="btn btn-default">Approve all</a>
+    {!! $questions->render() !!}
 @stop
