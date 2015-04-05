@@ -25,6 +25,7 @@ easier to organise subfolder routes (e.g. admin/.. account/..)
 great mailer
 much MUCH better asset management (gulp)
 much cleaner, less code - less dev time
+cron scheduler
 
 
 
@@ -88,6 +89,7 @@ AUTH
 MIGRATE HTML, CSS, etc
 - assets - revise again
 - Theme - teepluss/laravel-theme
+- get entire non-js views finished before new "japantravel" theme
 - bring in CSS, js
 - admin: second layout, console style
 
