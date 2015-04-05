@@ -34,7 +34,7 @@ Route::resource('answers', 'AnswersController');
 // tags routes
 
 Route::get('tags', 'TagsController@index');
-Route::get('tags/{id}/{slug?}', 'TagsController@show');
+Route::get('tags/{id}/{slug?}', 'TagsController@show')->where('id', '[0-9]+');
 
 
 // manage authentication and registration of members

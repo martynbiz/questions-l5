@@ -7,7 +7,7 @@ use App\Http\Requests\QuestionRequest;
 use App\Question;
 use App\Tag;
 
-use Illuminate\Auth\AuthManager;
+use App\Auth\AuthManager;
 
 use App\Services\Points;
 

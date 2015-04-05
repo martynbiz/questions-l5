@@ -4,5 +4,5 @@
 # $('#deleteQuestionForm').confirmSubmit()
 #
 $.fn.confirmSubmit = (message) ->
-    if confirm(message)
-      $(this).submit()
+  if confirm(message)
+    $(this).submit()

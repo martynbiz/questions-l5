@@ -18,6 +18,17 @@ require __DIR__.'/../vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
+| Register The SimpleSAML Auto Loader
+|--------------------------------------------------------------------------
+|
+| This is the autoloader for SimpleSAMLphp to allow us to utilise SSO
+|
+*/
+
+require __DIR__.'/../../ssp-sp/lib/_autoload.php';
+
+/*
+|--------------------------------------------------------------------------
 | Include The Compiled Class File
 |--------------------------------------------------------------------------
 |

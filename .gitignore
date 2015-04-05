@@ -1,3 +1,6 @@
 /vendor
 /node_modules
 .env
+
+# we'll ignore the symlink as the paths will vary
+public/saml

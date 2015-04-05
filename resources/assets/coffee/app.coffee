@@ -10,3 +10,5 @@ $(".alert")
 # activate bootstrap modals -- can't remember how this is used
 $("#myModal")
     .modal();
+    
+    

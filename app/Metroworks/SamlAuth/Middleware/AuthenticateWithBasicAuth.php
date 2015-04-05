@@ -1,9 +1,10 @@
-<?php namespace App\Http\Middleware;
+<?php namespace App\Metroworks\SamlAuth\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\Routing\Middleware;
 
-class AuthenticateAdmin {
+class AuthenticateWithBasicAuth implements Middleware {
 
 	/**
 	 * The Guard implementation.
@@ -32,18 +33,7 @@ class AuthenticateAdmin {
 	 */
 	public function handle($request, Closure $next)
 	{
-		// if not logged in, redirect them to login
-		if (!$this->auth->user()) {
-			return redirect()->guest('auth/login');
-		}
-		
-		// ..otherwise
-		if (!$this->auth->user()->isAdmin())
-		{
-			return response('Unauthorized.', 401);
-		}
-
-		return $next($request);
+		return $this->auth->basic() ?: $next($request);
 	}
 
 }

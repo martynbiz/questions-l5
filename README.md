@@ -1,3 +1,5 @@
+http://laravel.io/forum/04-05-2015-i-want-to-implement-my-own-auth-in-laravel-5-where-to-start
+
 today:
 - reply to politics posts
 - phone pam
@@ -26,6 +28,12 @@ much cleaner, less code - less dev time
 
 
 
+
+? what does a service provider do that a composer library doesn't?
+
+I composer library is "available" on each request. 
+
+I provider is loaded/ run on each request.
 
 
 
@@ -68,7 +76,7 @@ TODO
 
 
 
-account - questions, answers, profile
+
 
 
 AUTH
@@ -85,7 +93,9 @@ MIGRATE HTML, CSS, etc
 
 
 Question
-- total_views?
+- total_views? -- this should go into meta table (as we have events clearing cache on update, this would trigger every page load)
+
+account - questions, answers, profile, following
 
 
 
@@ -160,3 +170,5 @@ gulp and phpunit testing
 every model has date_* attributes (e.g. date_created)
 
 don't delete users as we don't remove questions. to revoke their access, either disable or delete on sso
+
+install saml - symlink, autoloader, SimpleSAMLGuard
