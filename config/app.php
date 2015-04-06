@@ -158,8 +158,6 @@ return [
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
 		// 'App\Metroworks\SamlAuth\AuthServiceProvider',
-		
-		'Teepluss\Theme\ThemeServiceProvider',
 
 	],
 
@@ -213,8 +211,6 @@ return [
 		'Html'      => 'Illuminate\Html\HtmlFacade',
 		'Str'       => 'Illuminate\Support\Str',
 		'Mailer'    => 'Illuminate\Support\Mail',
-		
-		'Theme' 	=> 'Teepluss\Theme\Facades\Theme',
 
 	],
 

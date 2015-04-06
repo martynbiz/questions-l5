@@ -38,12 +38,10 @@ class QuestionsController extends Controller {
      */
     public function index() // newest
     {
-        $theme = \Theme::uses('default')->layout('default');
-        
         list($newest, $popular, $unanswered) = $this->getHomeQuestions();
         
         // render the view script, or json if ajax request
-        return $theme->watch('questions.index', compact('newest', 'popular', 'unanswered'))->render();
+        return $this->render('questions.index', compact('newest', 'popular', 'unanswered'))->render();
     }
     
     /**
