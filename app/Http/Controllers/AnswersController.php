@@ -20,6 +20,8 @@ class AnswersController extends Controller {
      */
     public function __construct(Answer $answer)
     {
+        parent::__construct();
+        
         // set our controllers model
         $this->answer = $answer;
         

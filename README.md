@@ -76,7 +76,8 @@ TODO
 
 
 
-
+THEMES
+- how to channel to css files - symlinks?
 
 
 

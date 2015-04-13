@@ -126,7 +126,7 @@ return [
 		 * Laravel Framework Service Providers...
 		 */
 		'Illuminate\Foundation\Providers\ArtisanServiceProvider',
-		'Illuminate\Auth\AuthServiceProvider',
+		// 'Illuminate\Auth\AuthServiceProvider',
 		'Illuminate\Bus\BusServiceProvider',
 		'Illuminate\Cache\CacheServiceProvider',
 		'Illuminate\Foundation\Providers\ConsoleSupportServiceProvider',
@@ -157,7 +157,9 @@ return [
 		'App\Providers\ConfigServiceProvider',
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
-		// 'App\Metroworks\SamlAuth\AuthServiceProvider',
+		'App\Metroworks\SamlAuth\AuthServiceProvider',
+		
+		'Caffeinated\Themes\ThemesServiceProvider'
 
 	],
 
@@ -211,6 +213,9 @@ return [
 		'Html'      => 'Illuminate\Html\HtmlFacade',
 		'Str'       => 'Illuminate\Support\Str',
 		'Mailer'    => 'Illuminate\Support\Mail',
+		
+		'Theme'     => 'Caffeinated\Themes\Facades\Theme',
+		'Component' => 'Caffeinated\Themes\Facades\Component'
 
 	],
 

@@ -33,7 +33,9 @@ class AuthController extends Controller {
 	 */
 	public function __construct(Guard $auth, Registrar $registrar)
 	{
-		$this->auth = $auth;
+		parent::__construct();
+        
+        $this->auth = $auth;
 		$this->registrar = $registrar;
 
 		$this->middleware('guest', ['except' => 'getLogout']);
@@ -68,7 +70,7 @@ class AuthController extends Controller {
 	 */
 	public function getRegister()
 	{
-		return view('auth.register');
+		return $this->render('auth.register');
 	}
 
 	/**
@@ -109,7 +111,7 @@ class AuthController extends Controller {
 	 */
 	public function getLogin()
 	{
-		return view('auth.login');
+		return $this->render('auth.login');
 	}
 
 	/**

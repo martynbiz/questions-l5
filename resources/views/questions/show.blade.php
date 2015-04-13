@@ -1,4 +1,4 @@
-@extends('app')
+@extends($theme_layout)
 
 @section('content')
     <ol class="breadcrumb">
@@ -12,10 +12,10 @@
     
     <div>
         {!! Form::open(array('route' => array('questions.destroy', $question->id), 'method' => 'delete', 'id' => 'questionDelete_' . $question->id)) !!}
-            @if (Auth::user()->canUpdate($question))
+            @if (Auth::user() and Auth::user()->canUpdate($question))
                 <a href="{{route('questions.edit', [$question->id])}}">Edit</a>
             @endif
-            @if (Auth::user()->canDelete($question))
+            @if (Auth::user() and Auth::user()->canDelete($question))
                 <a href="#" onclick="$('#questionDelete_{{$question->id}}').confirmSubmit('Are you sure you want to delete this question?'); return false;">Delete</a>
             @endif
         {!! Form::close() !!}

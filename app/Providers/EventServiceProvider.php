@@ -83,6 +83,16 @@ class EventServiceProvider extends ServiceProvider {
 		    // empty the cache
 		    Tag::emptyCache();
 		});
+		
+		
+
+		// // ** not sure where yet to put this
+		// $theme = \Config::get('themes.theme');
+		// $altPath = base_path() . '/themes/' . $theme . '/views/';
+
+		// // echo $altPath; exit;
+
+		// \View::addLocation($altPath);
 	}
 
 }

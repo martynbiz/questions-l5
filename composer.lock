@@ -4,8 +4,58 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5e704452b57a34de10d1ec43b22020ad",
+    "hash": "ec999d323e36e0774756d39a5794c745",
     "packages": [
+        {
+            "name": "caffeinated/themes",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/caffeinated/themes.git",
+                "reference": "31318e3b91ab374dbc26583bcf3d9ecca63bc817"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/caffeinated/themes/zipball/31318e3b91ab374dbc26583bcf3d9ecca63bc817",
+                "reference": "31318e3b91ab374dbc26583bcf3d9ecca63bc817",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/config": "~5.0",
+                "illuminate/filesystem": "~5.0",
+                "illuminate/support": "~5.0",
+                "illuminate/view": "~5.0",
+                "php": ">=5.4.0"
+            },
+            "suggest": {
+                "caffeinated/sapling": "Laravel 5.0 Twig integration package"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Caffeinated\\Themes\\": "src/Caffeinated/Themes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Shea Lewis",
+                    "email": "shea.lewis89@gmail.com"
+                }
+            ],
+            "description": "Laravel 5 Themes",
+            "keywords": [
+                "blade",
+                "caffeinated",
+                "laravel",
+                "themes",
+                "twig"
+            ],
+            "time": "2015-02-11 18:48:40"
+        },
         {
             "name": "classpreloader/classpreloader",
             "version": "1.2.0",
@@ -1030,35 +1080,6 @@
                 "php"
             ],
             "time": "2015-04-03 14:33:59"
-        },
-        {
-            "name": "pear-pear.php.net/Text_Password",
-            "version": "1.1.1",
-            "dist": {
-                "type": "file",
-                "url": "http://pear.php.net/get/Text_Password-1.1.1.tgz",
-                "reference": null,
-                "shasum": null
-            },
-            "require": {
-                "php": ">=4.2.0.0"
-            },
-            "replace": {
-                "pear-pear/text_password": "== 1.1.1.0"
-            },
-            "type": "pear-library",
-            "autoload": {
-                "classmap": [
-                    ""
-                ]
-            },
-            "include-path": [
-                "/"
-            ],
-            "license": [
-                "PHP License"
-            ],
-            "description": "Text_Password allows one to create pronounceable and unpronounceable\npasswords. The full functional range is explained in the manual at\nhttp://pear.php.net/manual/."
         },
         {
             "name": "psr/log",
@@ -2612,16 +2633,16 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "1.4.0",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "db32c18eba00b121c145575fcbcd4d4d24e6db74"
+                "reference": "eab81d02569310739373308137284e0158424330"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/db32c18eba00b121c145575fcbcd4d4d24e6db74",
-                "reference": "db32c18eba00b121c145575fcbcd4d4d24e6db74",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/eab81d02569310739373308137284e0158424330",
+                "reference": "eab81d02569310739373308137284e0158424330",
                 "shasum": ""
             },
             "require": {
@@ -2657,20 +2678,20 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2015-01-17 09:51:32"
+            "time": "2015-04-08 04:46:07"
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.6.1",
+            "version": "4.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "08b2aacdd8433abbba468f995d6d64b76a7a62ec"
+                "reference": "6c773fda0bdb5ea891d9e4430dcc26c990b9130b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/08b2aacdd8433abbba468f995d6d64b76a7a62ec",
-                "reference": "08b2aacdd8433abbba468f995d6d64b76a7a62ec",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6c773fda0bdb5ea891d9e4430dcc26c990b9130b",
+                "reference": "6c773fda0bdb5ea891d9e4430dcc26c990b9130b",
                 "shasum": ""
             },
             "require": {
@@ -2709,9 +2730,6 @@
             "autoload": {
                 "classmap": [
                     "src/"
-                ],
-                "files": [
-                    "src/Framework/Assert/Functions.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2732,7 +2750,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-04-03 13:46:59"
+            "time": "2015-04-07 09:16:49"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -3216,6 +3234,7 @@
     "stability-flags": {
         "illuminate/html": 20,
         "guzzlehttp/guzzle": 20,
+        "caffeinated/themes": 20,
         "mockery/mockery": 20
     },
     "prefer-stable": false,

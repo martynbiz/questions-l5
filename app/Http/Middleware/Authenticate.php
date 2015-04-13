@@ -20,6 +20,8 @@ class Authenticate {
 	 */
 	public function __construct(Guard $auth)
 	{
+		// var_dump($auth); exit;
+		
 		$this->auth = $auth;
 	}
 

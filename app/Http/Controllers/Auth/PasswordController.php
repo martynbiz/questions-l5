@@ -27,7 +27,9 @@ class PasswordController extends Controller {
 	 */
 	public function __construct(Guard $auth, PasswordBroker $passwords)
 	{
-		$this->auth = $auth;
+		parent::__construct();
+        
+        $this->auth = $auth;
 		$this->passwords = $passwords;
 
 		$this->middleware('guest');
@@ -66,7 +68,7 @@ class PasswordController extends Controller {
 	 */
 	public function getEmail()
 	{
-		return view('auth.password');
+		return $this->render('auth.password');
 	}
 
 	/**
@@ -117,7 +119,7 @@ class PasswordController extends Controller {
 			throw new NotFoundHttpException;
 		}
 
-		return view('auth.reset')->with('token', $token);
+		return $this->render('auth.reset')->with('token', $token);
 	}
 
 	/**

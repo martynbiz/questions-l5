@@ -1,4 +1,4 @@
-@extends('app')
+@extends($theme_layout)
 
 @section('content')
 <div class="container-fluid">

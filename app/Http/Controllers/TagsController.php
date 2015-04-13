@@ -13,6 +13,8 @@ class TagsController extends Controller {
      */
     public function __construct(Tag $tag)
     {
+        parent::__construct();
+        
         // set our controllers model
         $this->tag = $tag;
     }
@@ -26,7 +28,7 @@ class TagsController extends Controller {
 	{
 		$tags = $this->tag->all();
 		
-		return view('tags.index', compact('tags'));
+		return $this->render('tags.index', compact('tags'));
 	}
 
 	/**
@@ -59,7 +61,7 @@ class TagsController extends Controller {
 	{
 		$tag = $this->tag->find($id);
 		
-		return view('tags.show', compact('tag'));
+		return $this->render('tags.show', compact('tag'));
 	}
 
 	/**

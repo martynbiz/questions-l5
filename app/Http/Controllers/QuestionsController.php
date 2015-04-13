@@ -22,6 +22,8 @@ class QuestionsController extends Controller {
      */
     public function __construct(Question $question)
     {
+        parent::__construct();
+        
         // set our controllers model
         $this->question = $question;
         
@@ -41,7 +43,7 @@ class QuestionsController extends Controller {
         list($newest, $popular, $unanswered) = $this->getHomeQuestions();
         
         // render the view script, or json if ajax request
-        return $this->render('questions.index', compact('newest', 'popular', 'unanswered'))->render();
+        return $this->render('questions.index', compact('newest', 'popular', 'unanswered'));
     }
     
     /**
