@@ -135,35 +135,44 @@ class Guard implements GuardContract {
 		{
 			return $this->user;
 		}
-
-		$id = $this->session->get($this->getName());
-
+		
+		$authService = new \SimpleSAML_Auth_Simple('qa-martyndev');
+		
+		$attributes = $authService->getAttributes();
+		
+		// **getAtributes() -- get username
+		// $id = $this->session->get($this->getName());
+		
 		// First we will try to load the user using the identifier in the session if
 		// one exists. Otherwise we will check for a "remember me" cookie in this
 		// request, and if one exists, attempt to retrieve the user using that.
 		$user = null;
 
-		if ( ! is_null($id))
+		if (isset($attributes['username'])) // ** which column should be configurable I guess
 		{
-			$user = $this->provider->retrieveById($id);
+			// **retrieveByUsername
+			// $user = $this->provider->retrieveById($id);
+			$user = $this->provider->retrieveByUsername($attributes['username']);
 		}
-
+		
 		// If the user is null, but we decrypt a "recaller" cookie we can attempt to
 		// pull the user data on that cookie which serves as a remember cookie on
 		// the application. Once we have a user we can return it to the caller.
-		$recaller = $this->getRecaller();
+		// NOTE: With SSO login we don't really require this here, it belongs on the
+		// SSO end.
+		// $recaller = $this->getRecaller();
 
-		if (is_null($user) && ! is_null($recaller))
-		{
-			$user = $this->getUserByRecaller($recaller);
+		// if (is_null($user) && ! is_null($recaller))
+		// {
+		// 	$user = $this->getUserByRecaller($recaller);
 
-			if ($user)
-			{
-				$this->updateSession($user->getAuthIdentifier());
+		// 	if ($user)
+		// 	{
+		// 		$this->updateSession($user->getAuthIdentifier());
 
-				$this->fireLoginEvent($user, true);
-			}
-		}
+		// 		$this->fireLoginEvent($user, true);
+		// 	}
+		// }
 
 		return $this->user = $user;
 	}
@@ -187,63 +196,63 @@ class Guard implements GuardContract {
 		return $id;
 	}
 
-	/**
-	 * Pull a user from the repository by its recaller ID.
-	 *
-	 * @param  string  $recaller
-	 * @return mixed
-	 */
-	protected function getUserByRecaller($recaller)
-	{
-		if ($this->validRecaller($recaller) && ! $this->tokenRetrievalAttempted)
-		{
-			$this->tokenRetrievalAttempted = true;
+	// /**
+	//  * Pull a user from the repository by its recaller ID.
+	//  *
+	//  * @param  string  $recaller
+	//  * @return mixed
+	//  */
+	// protected function getUserByRecaller($recaller)
+	// {
+	// 	if ($this->validRecaller($recaller) && ! $this->tokenRetrievalAttempted)
+	// 	{
+	// 		$this->tokenRetrievalAttempted = true;
 
-			list($id, $token) = explode('|', $recaller, 2);
+	// 		list($id, $token) = explode('|', $recaller, 2);
 
-			$this->viaRemember = ! is_null($user = $this->provider->retrieveByToken($id, $token));
+	// 		$this->viaRemember = ! is_null($user = $this->provider->retrieveByToken($id, $token));
 
-			return $user;
-		}
-	}
+	// 		return $user;
+	// 	}
+	// }
 
-	/**
-	 * Get the decrypted recaller cookie for the request.
-	 *
-	 * @return string|null
-	 */
-	protected function getRecaller()
-	{
-		return $this->request->cookies->get($this->getRecallerName());
-	}
+	// /**
+	//  * Get the decrypted recaller cookie for the request.
+	//  *
+	//  * @return string|null
+	//  */
+	// protected function getRecaller()
+	// {
+	// 	return $this->request->cookies->get($this->getRecallerName());
+	// }
 
-	/**
-	 * Get the user ID from the recaller cookie.
-	 *
-	 * @return string
-	 */
-	protected function getRecallerId()
-	{
-		if ($this->validRecaller($recaller = $this->getRecaller()))
-		{
-			return head(explode('|', $recaller));
-		}
-	}
+	// /**
+	//  * Get the user ID from the recaller cookie.
+	//  *
+	//  * @return string
+	//  */
+	// protected function getRecallerId()
+	// {
+	// 	if ($this->validRecaller($recaller = $this->getRecaller()))
+	// 	{
+	// 		return head(explode('|', $recaller));
+	// 	}
+	// }
 
-	/**
-	 * Determine if the recaller cookie is in a valid format.
-	 *
-	 * @param  string  $recaller
-	 * @return bool
-	 */
-	protected function validRecaller($recaller)
-	{
-		if ( ! is_string($recaller) || ! str_contains($recaller, '|')) return false;
+	// /**
+	//  * Determine if the recaller cookie is in a valid format.
+	//  *
+	//  * @param  string  $recaller
+	//  * @return bool
+	//  */
+	// protected function validRecaller($recaller)
+	// {
+	// 	if ( ! is_string($recaller) || ! str_contains($recaller, '|')) return false;
 
-		$segments = explode('|', $recaller);
+	// 	$segments = explode('|', $recaller);
 
-		return count($segments) == 2 && trim($segments[0]) !== '' && trim($segments[1]) !== '';
-	}
+	// 	return count($segments) == 2 && trim($segments[0]) !== '' && trim($segments[1]) !== '';
+	// }
 
 	/**
 	 * Log a user into the application without sessions or cookies.
@@ -418,14 +427,13 @@ class Guard implements GuardContract {
 	/**
 	 * Log a user into the application.
 	 *
-	 * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
-	 * @param  bool  $remember
+	 * @param  array  $credentials
 	 * @return void
 	 */
 	public function login(UserContract $user, $remember = false)
 	{
 		$this->updateSession($user->getAuthIdentifier());
-
+		
 		// If the user should be permanently "remembered" by the application we will
 		// queue a permanent cookie that contains the encrypted copy of the user
 		// identifier. We will then decrypt this later to retrieve the users.
@@ -442,6 +450,19 @@ class Guard implements GuardContract {
 		$this->fireLoginEvent($user, $remember);
 
 		$this->setUser($user);
+	}
+
+	/**
+	 * Log a user into the application using credentials
+	 *
+	 * @param  array  $credentials
+	 * @return void
+	 */
+	public function loginByCredentials($credentials)
+	{
+		$user = $this->provider->retrieveByCredentials($credentials);
+		
+		$this->login($user);
 	}
 
 	/**

@@ -45,12 +45,25 @@ class EloquentUserProvider implements UserProvider {
 	}
 
 	/**
-	 * Retrieve a user by their unique identifier and "remember me" token.
+	 * Retrieve a user by their unique identifier.
 	 *
 	 * @param  mixed  $identifier
-	 * @param  string  $token
 	 * @return \Illuminate\Contracts\Auth\Authenticatable|null
 	 */
+	public function retrieveByUsername($username)
+	{
+		$user = $this->createModel()->where('username', '=', $username)->first();
+		
+		return $user;
+	}
+
+	// /**
+	//  * Retrieve a user by their unique identifier and "remember me" token.
+	//  *
+	//  * @param  mixed  $identifier
+	//  * @param  string  $token
+	//  * @return \Illuminate\Contracts\Auth\Authenticatable|null
+	//  */
 	public function retrieveByToken($identifier, $token)
 	{
 		$model = $this->createModel();

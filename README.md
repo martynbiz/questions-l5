@@ -82,6 +82,7 @@ THEMES
 
 
 AUTH
+- local version of ssp - from work
 - switch over to SSO, keep the same methods on Auth
 - allow it so that you can switch between auth systems easy enough
 

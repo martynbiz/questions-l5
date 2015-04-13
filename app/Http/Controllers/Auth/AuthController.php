@@ -31,7 +31,7 @@ class AuthController extends Controller {
 	 * @param  \Illuminate\Contracts\Auth\Registrar  $registrar
 	 * @return void
 	 */
-	public function __construct(Guard $auth, Registrar $registrar)
+	public function __construct(Guard $auth, Registrar $registrar) // ** pass in Saml object
 	{
 		parent::__construct();
         
@@ -68,10 +68,10 @@ class AuthController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function getRegister()
-	{
-		return $this->render('auth.register');
-	}
+	// public function getRegister()
+	// {
+	// 	return $this->render('auth.register');
+	// }
 
 	/**
 	 * Handle a registration request for the application.
@@ -79,39 +79,57 @@ class AuthController extends Controller {
 	 * @param  \Illuminate\Foundation\Http\FormRequest  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function postRegister(Request $request, Notify $notify)
-	{
-		// validate the new user
-		$validator = $this->registrar->validator($request->all());
+	// public function postRegister(Request $request, Notify $notify)
+	// {
+	// 	// validate the new user
+	// 	$validator = $this->registrar->validator($request->all());
 		
-		// throw exception if validation fails
-		if ($validator->fails())
-		{
-			$this->throwValidationException(
-				$request, $validator
-			);
-		}
+	// 	// throw exception if validation fails
+	// 	if ($validator->fails())
+	// 	{
+	// 		$this->throwValidationException(
+	// 			$request, $validator
+	// 		);
+	// 	}
 		
-		// create the new user
-		$user = $this->registrar->create( $request->all() );
+	// 	// create the new user
+	// 	$user = $this->registrar->create( $request->all() );
 		
-		// send notification email
-        $notify->toNewUserReNewRegistration($user);
+	// 	// send notification email
+ //        $notify->toNewUserReNewRegistration($user);
 		
-		// log the user in
-		$this->auth->login($user);
+	// 	// log the user in
+	// 	$this->auth->login($user);
 
-		return redirect($this->redirectPath());
-	}
+	// 	return redirect($this->redirectPath());
+	// }
 
 	/**
 	 * Show the application login form.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function getLogin()
+	public function getLogin(User $user)
 	{
-		return $this->render('auth.login');
+		// return $this->render('auth.login');
+		$auth = new \SimpleSAML_Auth_Simple('qa-martyndev'); // ** get entity id from config
+		
+		// check login is required
+		$auth->requireAuth();
+		
+		
+		
+		// ..sso login successful, let's proceed to login them in locally
+		
+		// get attributes to retrieve the username
+		$attributes = $auth->getAttributes();
+		
+		// login the user with the sso attributes usernname
+		$this->auth->loginByCredentials([
+			'username' => $attributes['username'], // ** configurable credentials
+		]);
+		
+		return redirect()->intended($this->redirectPath());
 	}
 
 	/**
@@ -120,25 +138,25 @@ class AuthController extends Controller {
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function postLogin(Request $request)
-	{
-		$this->validate($request, [
-			'email' => 'required', 'password' => 'required',
-		]);
+	// public function postLogin(Request $request)
+	// {
+	// 	$this->validate($request, [
+	// 		'email' => 'required', 'password' => 'required',
+	// 	]);
 
-		$credentials = $request->only('email', 'password');
+	// 	$credentials = $request->only('email', 'password');
 
-		if ($this->auth->attempt($credentials, $request->has('remember')))
-		{
-			return redirect()->intended($this->redirectPath());
-		}
+	// 	if ($this->auth->attempt($credentials, $request->has('remember')))
+	// 	{
+	// 		return redirect()->intended($this->redirectPath());
+	// 	}
 
-		return redirect($this->loginPath())
-					->withInput($request->only('email', 'remember'))
-					->withErrors([
-						'email' => 'These credentials do not match our records.',
-					]);
-	}
+	// 	return redirect($this->loginPath())
+	// 				->withInput($request->only('email', 'remember'))
+	// 				->withErrors([
+	// 					'email' => 'These credentials do not match our records.',
+	// 				]);
+	// }
 
 	/**
 	 * Log the user out of the application.
@@ -147,7 +165,10 @@ class AuthController extends Controller {
 	 */
 	public function getLogout()
 	{
-		$this->auth->logout();
+		// $this->auth->logout();
+		$auth = new \SimpleSAML_Auth_Simple('qa-martyndev');
+		
+		$auth->logout();
 
 		return redirect('/');
 	}
@@ -172,9 +193,9 @@ class AuthController extends Controller {
 	 *
 	 * @return string
 	 */
-	public function loginPath()
-	{
-		return property_exists($this, 'loginPath') ? $this->loginPath : '/auth/login';
-	}
+	// public function loginPath()
+	// {
+	// 	return property_exists($this, 'loginPath') ? $this->loginPath : '/auth/login';
+	// }
 
 }
